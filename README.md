@@ -36,7 +36,7 @@
 - Before running the script, ensure it is executable.
 
 ```bash
-   chmod +x brew-install.sh
+chmod +x brew-install.sh
 ```
 
 ### Running the Script
@@ -56,4 +56,4 @@ To launch the installation script in the macOS terminal, use the following comma
 ![Fabriktor Logo](https://backend.fabriktor.com/filehub/img/gitlab/key.gif)
 ![Fabriktor Logo](https://backend.fabriktor.com/filehub/img/gitlab/boss.gif)
 
--   🔗 [Fabriktor Inc.](https://fabriktor.com)
+- 🔗 [Fabriktor Inc.](https://fabriktor.com)
