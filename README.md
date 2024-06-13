@@ -32,7 +32,7 @@
 - Symlinks dotfiles to the appropriate locations using `Stow`.
 - Ensures a consistent and reproducible setup.
 
-## Make the Script Executable
+### Make the Script Executable
 - Before running the script, ensure it is executable.
 
 ```bash
