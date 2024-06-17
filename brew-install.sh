@@ -25,6 +25,7 @@ echo "Setting up symlinks with stow..."
 stow git
 stow zsh
 stow nvim
+stow tmux
 echo "...Done"
 
 # Add zsh to valid login shells.
