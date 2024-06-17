@@ -67,14 +67,29 @@ keymap.set("n", "<C-w><down>", "<C-w>-")
 
 -- Diagnostics.
 keymap.set("n", "<C-j>", function()
-  vim.diagnostic.goto_next()
+	vim.diagnostic.goto_next()
 end, opts)
 keymap.set("n", "<leader>r", function()
-  require("craftzdog.hsl").replaceHexWithHSL()
+	require("craftzdog.hsl").replaceHexWithHSL()
 end)
 keymap.set("n", "<leader>i", function()
-  require("craftzdog.lsp").toggleInlayHints()
+	require("craftzdog.lsp").toggleInlayHints()
 end)
 
 -- Inc-Rename.
 keymap.set("n", "<leader>rn", ":IncRename ")
+
+-- Noice.
+keymap.set("n", ";n", ":Noice<Enter>")
+
+-- Telescope.
+keymap.set("n", ";m", ":Telescope<Enter>")
+
+-- Go back (Last, quit).
+keymap.set("n", ";q", ":q<Enter>")
+
+-- Save.
+keymap.set("n", ";w", ":w<Enter>")
+
+-- Quit and save.
+keymap.set("n", ";l", ":wq<Enter>")

@@ -114,3 +114,4 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # Aliases.
 alias ls='ls -al'
+alias g='git'
