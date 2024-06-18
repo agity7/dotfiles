@@ -9,7 +9,23 @@ fi
 brew update
 
 # Install desired packages.
-brew install zsh git neovim tmux stow
+brew install zsh \ 
+git \
+	neovim \
+	tmux \
+	stow \
+	go@1.21 \
+	dart \
+	commitizen \
+	curl \
+	git \
+	gnu-sed \
+	go-swagger \
+	iterm2 \
+	rectangle \
+	font-fira-code-nerd-font \
+	docker \
+	android-studio
 
 # Install Oh-my-zsh.
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
