@@ -6,6 +6,10 @@
 - Includes a simple installation script for `macOS` to easily reproduce a development environment.
 - Plus, much more...
 
+## Important ⚠️
+
+- The repository should be cloned in the `~` directory and renamed to `.dotfiles`.
+
 ## Packages 📁
 
 ### Tmux
@@ -25,6 +29,10 @@
 - Aliases and functions to speed up command-line operations.
 - Environment settings and exports for a better shell experience.
 
+### iTerm2
+
+- Custom configuration for iTerm2 in `.setup.itermexport`.
+
 ## Installation Script 📜
 
 - A simple script to set up the entire development environment on `macOS`.
@@ -33,6 +41,7 @@
 - Ensures a consistent and reproducible setup.
 
 ### Make the Script Executable
+
 - Before running the script, ensure it is executable.
 
 ```bash

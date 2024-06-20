@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Ensure we are in the dotfiles directory.
+cd ~/.dotfiles || exit
+
 # Check for Homebrew.
 if ! command -v brew &>/dev/null; then
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -38,7 +41,7 @@ rm -rf $HOME/.zshrc
 
 # Stow.
 echo "Setting up symlinks with stow..."
-stow git
+stow iterm2
 stow zsh
 stow nvim
 stow tmux
