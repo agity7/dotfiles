@@ -1,3 +1,9 @@
+## 0.0.4 (2024-06-20)
+
+### Perf
+
+- **brew-install.sh**: enhanced the script by adding a directory change to dotfiles folder
+
 ## 0.0.3 (2024-06-17)
 
 ### Fix
