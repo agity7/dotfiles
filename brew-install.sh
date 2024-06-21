@@ -59,5 +59,5 @@ echo "Setting zsh as default shell..."
 sudo chsh -s "$(which zsh)" "$USER"
 echo "...Done"
 
-# Exit.
+# Exit successfully.
 exit 0
