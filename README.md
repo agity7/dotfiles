@@ -3,7 +3,8 @@
 ## Overview 📒
 
 - Contains many `dotfiles` for various packages.
-- Includes a simple installation script for `macOS` to easily reproduce a development environment.
+- Includes a simple installation script for `macOS`
+  to easily reproduce a development environment.
 - Plus, much more...
 
 ## Important ⚠️
@@ -25,7 +26,8 @@
 
 ### Zsh
 
-- Custom `.zshrc` with theme settings and plugin management using `Oh My Zsh` and `PowerLevel10k`.
+- Custom `.zshrc` with theme settings and plugin management
+  using `Oh My Zsh` and `PowerLevel10k`.
 - Aliases and functions to speed up command-line operations.
 - Environment settings and exports for a better shell experience.
 
