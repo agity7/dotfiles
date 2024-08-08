@@ -115,3 +115,5 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 # Aliases.
 alias ls='ls -al'
 alias g='git'
+export PATH="/opt/homebrew/opt/go@1.21/bin:$PATH"
+export PATH="/opt/homebrew/opt/go@1.21/bin:$PATH"
