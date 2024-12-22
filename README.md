@@ -7,6 +7,42 @@
   to easily reproduce a development environment.
 - Plus, much more...
 
+## Environment Setup
+
+### Core Tools
+- WezTerm (terminal emulator)
+- Neovim (code editor)
+- Starship (shell prompt)
+- tmux (terminal multiplexer)
+- zsh (shell)
+- Homebrew (package manager)
+
+### Packages
+- zsh
+- git
+- neovim
+- tmux
+- stow
+- go@1.21
+- dart
+- commitizen
+- curl
+- gnu-sed
+- go-swagger
+- zsh-syntax-highlighting
+- zsh-autosuggestions
+- starship
+
+### Fonts
+- Fira Code Nerd Font
+
+### GUI Applications
+- WezTerm
+- Flutter
+- Rectangle
+- Docker
+- Android Studio
+
 ## Important ⚠️
 
 - The repository should be cloned in the `~` directory and renamed to `.dotfiles`.
