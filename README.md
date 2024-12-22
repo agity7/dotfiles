@@ -7,7 +7,7 @@
   to easily reproduce a development environment.
 - Plus, much more...
 
-## Environment Setup
+## Environment Setup 🔧
 
 ### Core Tools
 - WezTerm (terminal emulator)

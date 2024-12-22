@@ -3,8 +3,8 @@ local keymap = vim.keymap
 local opts = { noremap = true, silent = true }
 
 -- Set leader keys.
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 -- General Keymaps (not using any leader).
 keymap.set("i", "kj", "<Esc>", opts) -- Exit insert mode with successive press of k,j.
@@ -14,20 +14,22 @@ keymap.set("n", "-", "<C-x>", opts) -- Decrement.
 keymap.set("n", "dq", 'vb"_d', opts) -- Delete a word backwards without affecting the default register.
 keymap.set("n", "dw", '"_daw', opts) -- Delete a word without affecting the default register.
 keymap.set("n", "te", ":tabedit<Return>") -- New tab.
-keymap.set("n", "<tab>", ":tabnext<Return>", opts) -- Next tab.
-keymap.set("n", "<s-tab>", ":tabprev<Return>", opts) -- Previous tab.
-keymap.set('n', 'n', 'nzzzv', opts) -- Find next and center.
-keymap.set('n', 'N', 'Nzzzv', opts) -- Find previous and center.
+-- keymap.set("n", "<tab>", ":tabnext<Return>", opts) -- Next tab.
+-- keymap.set("n", "<s-tab>", ":tabprev<Return>", opts) -- Previous tab.
+keymap.set("n", "H", ":tabprev<CR>", opts) -- Go to the previous tab
+keymap.set("n", "L", ":tabnext<CR>", opts) -- Go to the next tab
+keymap.set("n", "n", "nzzzv", opts) -- Find next and center.
+keymap.set("n", "N", "Nzzzv", opts) -- Find previous and center.
 keymap.set("n", "sp", ":split<Return>", opts) -- Horizontal split.
 keymap.set("n", "vsp", ":vsplit<Return>", opts) -- Vertical split.
-keymap.set('n', '<Up>', ':resize -2<CR>', opts) -- Resize window (up).
-keymap.set('n', '<Down>', ':resize +2<CR>', opts) -- Resize window (down).
-keymap.set('n', '<Left>', ':vertical resize -2<CR>', opts) -- Resize window (left).
-keymap.set('n', '<Right>', ':vertical resize +2<CR>', opts) -- Resize window (right).
-keymap.set('n', '<C-k>', ':wincmd k<CR>', opts) -- Navigate to split (up).
-keymap.set('n', '<C-j>', ':wincmd j<CR>', opts) -- Navigate to split (down).
-keymap.set('n', '<C-h>', ':wincmd h<CR>', opts) -- Navigate to split (left).
-keymap.set('n', '<C-l>', ':wincmd l<CR>', opts) -- Navigate to split (right).
+keymap.set("n", "<Up>", ":resize -2<CR>", opts) -- Resize window (up).
+keymap.set("n", "<Down>", ":resize +2<CR>", opts) -- Resize window (down).
+keymap.set("n", "<Left>", ":vertical resize -2<CR>", opts) -- Resize window (left).
+keymap.set("n", "<Right>", ":vertical resize +2<CR>", opts) -- Resize window (right).
+keymap.set("n", "<C-k>", ":wincmd k<CR>", opts) -- Navigate to split (up).
+keymap.set("n", "<C-j>", ":wincmd j<CR>", opts) -- Navigate to split (down).
+keymap.set("n", "<C-h>", ":wincmd h<CR>", opts) -- Navigate to split (left).
+keymap.set("n", "<C-l>", ":wincmd l<CR>", opts) -- Navigate to split (right).
 keymap.set("n", "<C-m>", "<C-i>", opts) -- Jumplist (forward).
 
 -- Keymaps using the main Leader.
