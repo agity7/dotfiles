@@ -1,5 +1,6 @@
 return { -- Autocompletion
 	"hrsh7th/nvim-cmp",
+	dependencies = { "craftzdog/solarized-osaka.nvim" },
 	-- event = 'InsertEnter',
 	dependencies = {
 		-- Snippet Engine & its associated nvim-cmp source
@@ -28,12 +29,15 @@ return { -- Autocompletion
 		"rafamadriz/friendly-snippets",
 	},
 	config = function()
+		local colors = require("solarized-osaka.colors").setup()
+		vim.api.nvim_set_hl(0, "CodeiumIcon", { fg = colors.orange500 })
 		local cmp = require("cmp")
 		require("luasnip.loaders.from_vscode").lazy_load()
 		local luasnip = require("luasnip")
 		luasnip.config.setup({})
 
 		local kind_icons = {
+			Codeium = "",
 			Text = "󰉿",
 			Method = "m",
 			Function = "󰊕",
@@ -118,6 +122,7 @@ return { -- Autocompletion
 				end, { "i", "s" }),
 			}),
 			sources = {
+				{ name = "codeium" },
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
 				{ name = "buffer" },
@@ -128,8 +133,13 @@ return { -- Autocompletion
 				format = function(entry, vim_item)
 					-- Kind icons
 					vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+					-- Apply bright green color to the Codeium icon
+					if entry.source.name == "codeium" then
+						vim_item.kind_hl_group = "CodeiumIcon"
+					end
 					-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
 					vim_item.menu = ({
+						codeium = "[Codeium]",
 						nvim_lsp = "[LSP]",
 						luasnip = "[Snippet]",
 						buffer = "[Buffer]",
