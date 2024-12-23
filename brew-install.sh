@@ -17,7 +17,7 @@ brew install zsh \
     neovim \
     tmux \
     stow \
-    go@1.21 \
+    go@1.23 \
     dart \
     commitizen \
     curl \
@@ -25,7 +25,8 @@ brew install zsh \
     go-swagger \
     zsh-syntax-highlighting \
     zsh-autosuggestions \
-    starship
+    starship \
+    node
 
 # Install fonts.
 brew install font-fira-code-nerd-font
