@@ -41,7 +41,7 @@
 - Flutter
 - Rectangle
 - Docker
-- Android Studio
+- Android Studioreadme
 
 ## Important ⚠️
 
@@ -73,10 +73,4 @@ To launch the installation script in the macOS terminal, use the following comma
 ## General 💬
 
 - Feel free to use my files to inspire you to write your own!
-
-![Fabriktor Logo](https://backend.fabriktor.com/filehub/img/gitlab/chubby.gif)
-![Fabriktor Logo](https://backend.fabriktor.com/filehub/img/gitlab/screwdriver.gif)
-![Fabriktor Logo](https://backend.fabriktor.com/filehub/img/gitlab/key.gif)
-![Fabriktor Logo](https://backend.fabriktor.com/filehub/img/gitlab/boss.gif)
-
-- 🔗 [Fabriktor Inc.](https://fabriktor.com)
+- Check out [Fabriktor](https://fabriktor.com).
