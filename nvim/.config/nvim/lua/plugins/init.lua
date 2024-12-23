@@ -20,5 +20,6 @@ return {
 	require("plugins.misc"),
 	require("plugins.codeium"),
 	require("plugins.noice"),
+	require("plugins.smearcursor"),
 	require("plugins.incline"),
 }
