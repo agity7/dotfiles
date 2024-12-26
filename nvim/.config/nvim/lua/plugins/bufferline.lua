@@ -7,9 +7,9 @@ return {
 	config = function()
 		require("bufferline").setup({
 			options = {
-				mode = "tabs", -- set to "tabs" to only show tabpages instead
-				themable = true, -- allows highlight groups to be overriden i.e. sets highlights as default
-				numbers = "none", -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
+				mode = "tabs",     -- set to "tabs" to only show tabpages instead
+				themable = true,   -- allows highlight groups to be overriden i.e. sets highlights as default
+				numbers = "none",  -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
 				close_command = "Bdelete! %d", -- can be a string | function, see "Mouse actions"
 				buffer_close_icon = "✗",
 				close_icon = "✗",
