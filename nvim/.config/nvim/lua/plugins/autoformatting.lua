@@ -8,7 +8,6 @@ return {
 		local null_ls = require("null-ls")
 		local formatting = null_ls.builtins.formatting -- to setup formatters
 		local diagnostics = null_ls.builtins.diagnostics -- to setup linters
-		local actions = null_ls.builtins.code_actions -- to setup code actions
 
 		-- list of formatters & linters for mason to install
 		require("mason-null-ls").setup({
@@ -32,11 +31,10 @@ return {
 		local sources = {
 			diagnostics.checkmake,
 			formatting.prettier.with({ filetypes = { "html", "json", "yaml", "markdown" } }),
-			formatting.stylua,
-			formatting.shfmt.with({ args = { "-i", "4" } }),
+			formatting.stylua.with({ filetypes = { "lua", "luau" } }),
+			formatting.shfmt.with({ filetypes = { "sh" } }),
 			diagnostics.golangci_lint.with({ filetypes = { "go" } }),
 			formatting.goimports_reviser.with({ filetypes = { "go" } }),
-			actions.gomodifytags.with({ filetypes = { "go" } }),
 			diagnostics.staticcheck.with({ filetypes = { "go" } }),
 			formatting.gofmt.with({ filetypes = { "go" } }),
 			formatting.goimports.with({ filetypes = { "go" } }),
