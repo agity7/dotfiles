@@ -22,7 +22,6 @@ return {
 				"staticcheck",
 				"gofmt",
 				"goimports",
-				"golines",
 			},
 			-- auto-install configured formatters & linters (with null-ls)
 			automatic_installation = true,
@@ -38,7 +37,6 @@ return {
 			diagnostics.staticcheck.with({ filetypes = { "go" } }),
 			formatting.gofmt.with({ filetypes = { "go" } }),
 			formatting.goimports.with({ filetypes = { "go" } }),
-			formatting.golines.with({ filetypes = { "go" } }),
 		}
 
 		local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
