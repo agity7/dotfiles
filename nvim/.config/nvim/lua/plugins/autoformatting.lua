@@ -16,7 +16,7 @@ return {
 				"prettier", -- ts/js formatter
 				"stylua", -- lua formatter
 				"shfmt",
-				-- "golangci-lint",
+				"golangci-lint",
 				"goimports-reviser",
 				"staticcheck",
 				"gofmt",
@@ -31,7 +31,7 @@ return {
 			formatting.prettier.with({ filetypes = { "html", "json", "yaml", "markdown" } }),
 			formatting.stylua.with({ filetypes = { "lua", "luau" } }),
 			formatting.shfmt.with({ filetypes = { "sh" } }),
-			-- diagnostics.golangci_lint.with({ filetypes = { "go" } }),
+			diagnostics.golangci_lint.with({ filetypes = { "go" } }),
 			formatting.goimports_reviser.with({ filetypes = { "go" } }),
 			diagnostics.staticcheck.with({ filetypes = { "go" } }),
 			formatting.gofmt.with({ filetypes = { "go" } }),
