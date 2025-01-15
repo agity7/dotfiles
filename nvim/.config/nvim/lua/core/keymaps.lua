@@ -57,8 +57,8 @@ keymap.set("n", ";l", ":wq<Enter>", opts)                        -- Save and qui
 keymap.set("n", ";[", ":Neotree toggle position=left<CR>", opts) -- Toggle Neotree.
 keymap.set("n", ";c", ":Codeium Chat<Enter>", opts)              --Open Codeium Chat.
 keymap.set("i", ";,", function()
-    require("cmp").complete()
+	require("cmp").complete()
 end, opts) -- Trigger completion explicitly in insert mode.
 keymap.set("n", ";,", function()
-    require("cmp").complete()
+	require("cmp").complete()
 end, opts) -- Trigger completion explicitly in normal mode.

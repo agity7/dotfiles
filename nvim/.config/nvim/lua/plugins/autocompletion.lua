@@ -1,6 +1,5 @@
 return { -- Autocompletion
 	"hrsh7th/nvim-cmp",
-	dependencies = { "craftzdog/solarized-osaka.nvim" },
 	-- event = 'InsertEnter',
 	dependencies = {
 		-- Snippet Engine & its associated nvim-cmp source
@@ -27,10 +26,13 @@ return { -- Autocompletion
 
 		-- Adds a number of user-friendly snippets
 		"rafamadriz/friendly-snippets",
+
+		-- Use solarized-osaka colorscheme
+		"craftzdog/solarized-osaka.nvim",
 	},
 	config = function()
 		local colors = require("solarized-osaka.colors").setup()
-		vim.api.nvim_set_hl(0, "CodeiumIcon", { fg = colors.orange500 })
+		vim.api.nvim_set_hl(0, "CodeiumIcon", { fg = colors.green300 })
 		local cmp = require("cmp")
 		require("luasnip.loaders.from_vscode").lazy_load()
 		local luasnip = require("luasnip")
@@ -121,13 +123,14 @@ return { -- Autocompletion
 					end
 				end, { "i", "s" }),
 			}),
-			sources = {
-				{ name = "codeium" },
-				{ name = "nvim_lsp" },
-				{ name = "luasnip" },
-				{ name = "buffer" },
-				{ name = "path" },
-			},
+			-- Adjust the order and priority of sources here
+			sources = cmp.config.sources({
+				{ name = "codeium", priority = 1000 }, -- Highest priority for Codeium
+				{ name = "nvim_lsp", priority = 900 },
+				{ name = "luasnip", priority = 800 },
+				{ name = "buffer", priority = 700 },
+				{ name = "path", priority = 600 },
+			}),
 			formatting = {
 				fields = { "kind", "abbr", "menu" },
 				format = function(entry, vim_item)

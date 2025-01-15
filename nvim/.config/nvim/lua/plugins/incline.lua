@@ -9,7 +9,7 @@ return {
 			highlight = {
 				groups = {
 					InclineNormal = {
-						guibg = colors.orange500,
+						guibg = colors.magenta100,
 						guifg = colors.base04,
 					},
 					InclineNormalNC = {

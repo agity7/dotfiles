@@ -9,6 +9,9 @@ return {
 			enable_chat = true,
 			virtual_text = {
 				enabled = true,
+				map_keys = true,
+				accept_fallback = "<Tab>",
+				idle_delay = 1,
 			},
 		})
 	end,
