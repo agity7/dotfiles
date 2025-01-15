@@ -31,9 +31,9 @@ return {
 			formatting.prettier.with({ filetypes = { "html", "json", "yaml", "markdown" } }),
 			formatting.stylua.with({ filetypes = { "lua", "luau" } }),
 			formatting.shfmt.with({ filetypes = { "sh" } }),
-			-- diagnostics.golangci_lint.with({ filetypes = { "go" } }), -- removed because conflicting with staticcheck
+			diagnostics.golangci_lint.with({ filetypes = { "go" } }),
 			formatting.goimports_reviser.with({ filetypes = { "go" } }),
-			diagnostics.staticcheck.with({ filetypes = { "go" } }),
+			-- diagnostics.staticcheck.with({ filetypes = { "go" } }), // Enable this OR golangci_lint.
 			formatting.gofmt.with({ filetypes = { "go" } }),
 			formatting.goimports.with({ filetypes = { "go" } }),
 		}
