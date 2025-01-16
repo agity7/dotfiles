@@ -176,15 +176,19 @@ return {
 			gopls = {
 				settings = {
 					gopls = {
-						staticcheck = false,
-						analyses = {
-							unusedparams = false,
-							shadow = false,
-						},
-						gofumpt = false,
+						staticcheck = false, -- Prevent linting inside gopls.
+						analyses = {},
 					},
 				},
 			},
+			-- gopls = {
+			--             staticcheck = true, -- Enable static analysis checks
+			--             analyses = {
+			--                 unusedparams = true, -- Highlight unused parameters
+			--                 shadow = true,       -- Highlight variable shadowing
+			--             },
+			--             gofumpt = true, -- Use 'gofumpt' for formatting
+			--         },
 			-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 			dockerls = {},
 			docker_compose_language_service = {},
