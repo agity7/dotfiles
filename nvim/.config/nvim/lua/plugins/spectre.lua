@@ -9,7 +9,7 @@ return {
 		require("spectre").setup({
 			default = {
 				replace = {
-					cmd = "sed", -- Default replace method (use "oxi" if installed)
+					cmd = "sed -i ''", -- Use `sed -i ''` to avoid backup files
 				},
 			},
 			is_block_ui_break = true, -- Avoid UI breaks
