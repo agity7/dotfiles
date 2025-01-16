@@ -5,7 +5,7 @@ cd ~/.dotfiles || exit
 
 # Check for Homebrew.
 if ! command -v brew &>/dev/null; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 # Update Homebrew.
@@ -13,37 +13,38 @@ brew update
 
 # Install CLI tools.
 brew install zsh \
-    git \
-    neovim \
-    tmux \
-    stow \
-    go@1.23 \
-    dart \
-    commitizen \
-    curl \
-    gnu-sed \
-    go-swagger \
-    zsh-syntax-highlighting \
-    zsh-autosuggestions \
-    starship \
-    node
+	git \
+	neovim \
+	tmux \
+	stow \
+	go@1.23 \
+	dart \
+	commitizen \
+	curl \
+	gnu-sed \
+	go-swagger \
+	zsh-syntax-highlighting \
+	zsh-autosuggestions \
+	starship \
+	node \
+	ripgrep
 
 # Install fonts.
 brew install font-fira-code-nerd-font
 
 # Install GUI applications.
 brew install --cask wezterm \
-    flutter \
-    rectangle \
-    docker \
-    android-studio
+	flutter \
+	rectangle \
+	docker \
+	android-studio
 
 # Create a backup of any current zsh configuration file, if it exists.
 if [ -f "$HOME/.zshrc" ]; then
-    cp "$HOME/.zshrc" "$HOME/.zshrc_bak"
-    echo "Backup of .zshrc created as .zshrc_bak."
+	cp "$HOME/.zshrc" "$HOME/.zshrc_bak"
+	echo "Backup of .zshrc created as .zshrc_bak."
 else
-    echo "No existing .zshrc file to back up."
+	echo "No existing .zshrc file to back up."
 fi
 
 # Stow.
@@ -58,7 +59,7 @@ echo "...Done"
 # Add zsh to valid login shells.
 echo "Adding zsh to valid login shells..."
 if ! grep -Fxq "$(command -v zsh)" /etc/shells; then
-    command -v zsh | sudo tee -a /etc/shells
+	command -v zsh | sudo tee -a /etc/shells
 fi
 echo "...Done"
 

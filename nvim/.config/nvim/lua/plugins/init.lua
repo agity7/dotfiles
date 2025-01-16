@@ -22,4 +22,5 @@ return {
 	require("plugins.noice"),
 	require("plugins.smearcursor"),
 	require("plugins.incline"),
+	require("plugins.spectre"),
 }
