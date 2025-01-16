@@ -24,3 +24,6 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#aaaaaa,nounderline'  # Grey for suggestions
 alias ls='ls -al'
 alias ll='ls -al'
 alias g='git'
+
+# Exports.
+export PATH="$HOME/.cargo/bin:$PATH"

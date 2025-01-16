@@ -2,14 +2,14 @@ return {
 	"nvim-pack/nvim-spectre",
 	event = "VeryLazy",
 	dependencies = {
-		"nvim-lua/plenary.nvim", -- Required dependency
+		"nvim-lua/plenary.nvim",                      -- Required dependency
 		{ "nvim-tree/nvim-web-devicons", optional = true }, -- Optional icons
 	},
 	opts = function()
 		require("spectre").setup({
 			default = {
 				replace = {
-					cmd = "sed -i ''", -- Use `sed -i ''` to avoid backup files
+					cmd = "sd",
 				},
 			},
 			is_block_ui_break = true, -- Avoid UI breaks

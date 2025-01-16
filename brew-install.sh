@@ -27,7 +27,17 @@ brew install zsh \
 	zsh-autosuggestions \
 	starship \
 	node \
-	ripgrep
+	ripgrep \
+	rust
+
+# Install oxi (Rust-based `sd`).
+if ! command -v sd &>/dev/null; then
+	echo "Installing oxi (Rust-based sd)..."
+	cargo install sd
+	echo "oxi (Rust-based sd) installed successfully."
+else
+	echo "oxi (Rust-based sd) is already installed."
+fi
 
 # Install fonts.
 brew install font-fira-code-nerd-font
