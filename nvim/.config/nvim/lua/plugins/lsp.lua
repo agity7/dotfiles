@@ -176,8 +176,12 @@ return {
 			gopls = {
 				settings = {
 					gopls = {
-						staticcheck = false, -- Prevent linting inside gopls.
-						analyses = {},
+						staticcheck = false,
+						analyses = {
+							unusedparams = false,
+							shadow = false,
+						},
+						gofumpt = false,
 					},
 				},
 			},
