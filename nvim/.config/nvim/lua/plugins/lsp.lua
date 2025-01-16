@@ -9,7 +9,7 @@ return {
 
 		-- Useful status updates for LSP.
 		-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-		{ "j-hui/fidget.nvim",       opts = {} },
+		{ "j-hui/fidget.nvim", opts = {} },
 
 		-- Allows extra capabilities provided by nvim-cmp
 		"hrsh7th/cmp-nvim-lsp",
@@ -176,19 +176,15 @@ return {
 			gopls = {
 				settings = {
 					gopls = {
-						staticcheck = false, -- Prevent linting inside gopls.
-						analyses = {},
+						staticcheck = false, -- Enable static analysis checks
+						analyses = {
+							unusedparams = false, -- Highlight unused parameters
+							shadow = false, -- Highlight variable shadowing
+						},
+						gofumpt = false, -- Use 'gofumpt' for formatting
 					},
 				},
 			},
-			-- gopls = {
-			--             staticcheck = true, -- Enable static analysis checks
-			--             analyses = {
-			--                 unusedparams = true, -- Highlight unused parameters
-			--                 shadow = true,       -- Highlight variable shadowing
-			--             },
-			--             gofumpt = true, -- Use 'gofumpt' for formatting
-			--         },
 			-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 			dockerls = {},
 			docker_compose_language_service = {},
