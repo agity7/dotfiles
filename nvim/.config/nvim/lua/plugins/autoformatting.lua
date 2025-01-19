@@ -33,7 +33,7 @@ return {
 			formatting.shfmt.with({ filetypes = { "sh" } }),
 			diagnostics.golangci_lint.with({ filetypes = { "go" } }),
 			formatting.goimports_reviser.with({ filetypes = { "go" } }),
-			-- diagnostics.staticcheck.with({ filetypes = { "go" } }), // Enable this OR golangci_lint.
+			-- diagnostics.staticcheck.with({ filetypes = { "go" } }),
 			formatting.gofmt.with({ filetypes = { "go" } }),
 			formatting.goimports.with({ filetypes = { "go" } }),
 		}

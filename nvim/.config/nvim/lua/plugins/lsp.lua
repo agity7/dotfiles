@@ -176,12 +176,12 @@ return {
 			gopls = {
 				settings = {
 					gopls = {
-						staticcheck = false, -- Enable static analysis checks
+						staticcheck = true, -- Enable static analysis checks
 						analyses = {
-							unusedparams = false, -- Highlight unused parameters
-							shadow = false, -- Highlight variable shadowing
+							unusedparams = true, -- Highlight unused parameters
+							shadow = true, -- Highlight variable shadowing
 						},
-						gofumpt = false, -- Use 'gofumpt' for formatting
+						gofumpt = true, -- Use 'gofumpt' for formatting
 					},
 				},
 			},
