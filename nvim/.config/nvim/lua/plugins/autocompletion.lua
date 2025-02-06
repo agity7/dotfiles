@@ -82,7 +82,7 @@ return { -- Autocompletion
 				["<C-j>"] = cmp.mapping.select_next_item(), -- Select the [n]ext item
 				["<C-k>"] = cmp.mapping.select_prev_item(), -- Select the [p]revious item
 				["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept the completion with Enter.
-				["<C-c>"] = cmp.mapping.complete({}),  -- Manually trigger a completion from nvim-cmp.
+				["<C-c>"] = cmp.mapping.complete({}), -- Manually trigger a completion from nvim-cmp.
 
 				-- Think of <c-l> as moving to the right of your snippet expansion.
 				--  So if you have a snippet that's like:
@@ -125,11 +125,11 @@ return { -- Autocompletion
 			}),
 			-- Adjust the order and priority of sources here
 			sources = cmp.config.sources({
-				{ name = "codeium",  priority = 1000 }, -- Highest priority for Codeium
+				{ name = "codeium", priority = 1000 }, -- Highest priority for Codeium
 				{ name = "nvim_lsp", priority = 900 },
-				{ name = "luasnip",  priority = 800 },
-				{ name = "buffer",   priority = 700 },
-				{ name = "path",     priority = 600 },
+				{ name = "luasnip", priority = 800 },
+				{ name = "buffer", priority = 700 },
+				{ name = "path", priority = 600 },
 			}),
 			formatting = {
 				fields = { "kind", "abbr", "menu" },
