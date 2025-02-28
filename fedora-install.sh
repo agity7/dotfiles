@@ -155,19 +155,8 @@ wget -O "$ANDROID_STUDIO_TAR" "$ANDROID_STUDIO_URL"
 
 # Extract Android Studio.
 echo "Extracting Android Studio..."
-sudo tar -xf "$ANDROID_STUDIO_TAR" -C /opt/
+sudo tar -xzf "$ANDROID_STUDIO_TAR" -C /opt/
 rm "$ANDROID_STUDIO_TAR"
-
-# Detect the extracted folder name dynamically.
-EXTRACTED_DIR=$(find /opt -maxdepth 1 -type d -name "android-studio*" | head -n 1)
-
-if [ -z "$EXTRACTED_DIR" ]; then
-	echo "❌ Error: Android Studio extraction failed. Directory not found."
-	exit 1
-fi
-
-# Move it to the correct location.
-sudo mv "$EXTRACTED_DIR" /opt/android-studio
 
 # Verify the extraction.
 if [ ! -f "/opt/android-studio/bin/studio.sh" ]; then
@@ -183,7 +172,6 @@ export PATH="$ANDROID_STUDIO_HOME/bin:$PATH"
 
 # Ensure Android Studio is detected.
 flutter config --android-studio-dir="$ANDROID_STUDIO_DIR"
-flutter config --android-studio-java-path="$JAVA_HOME"
 
 # Run Flutter doctor.
 echo "Running flutter doctor..."
