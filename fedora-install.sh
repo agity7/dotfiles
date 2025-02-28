@@ -5,6 +5,7 @@ DOTFILES_DIR="$HOME/dotfiles"
 CARGO_BIN="$HOME/.cargo/bin"
 FLUTTER_SDK_DIR="$HOME/development/flutter"
 FLUTTER_TAR="$HOME/Downloads/flutter_linux_3.29.0-stable.tar.xz"
+ANDROID_SDK="$HOME/Android/Sdk"
 LOG_FILE="$HOME/install.log"
 
 # Start logging.
@@ -35,7 +36,7 @@ echo "Caching sudo password..."
 sudo -v
 while sudo -v; do sleep 60; done 2>/dev/null &
 
-# Update DNF.
+# Update Fedora system.
 echo "Updating DNF packages..."
 if ! sudo dnf update -y; then
 	echo "Error: DNF update failed."
@@ -44,7 +45,7 @@ fi
 
 # Install CLI tools.
 echo "Installing CLI tools..."
-if ! sudo dnf install -y zsh \
+sudo dnf install -y zsh \
 	git \
 	neovim \
 	tmux \
@@ -61,17 +62,20 @@ if ! sudo dnf install -y zsh \
 	zip \
 	mesa-libGLU \
 	libstdc++ \
-	lib3270-devel.i686 \
-	bzip2-libs \
 	python3 \
 	python3-pip \
 	python3-virtualenv \
-	flatpak; then
+	flatpak \
+	fira-code-fonts \
+	clang \
+	cmake \
+	ninja-build \
+	gtk3-devel || {
 	echo "Error: DNF package installation failed."
 	exit 1
-fi
+}
 
-# Install pipx manually (since it's not in DNF).
+# Install pipx if missing.
 echo "Installing pipx..."
 if ! command -v pipx &>/dev/null; then
 	python3 -m pip install --user pipx
@@ -89,12 +93,7 @@ fi
 
 # Install Commitizen.
 echo "Installing Commitizen..."
-if ! command -v cz &>/dev/null; then
-	pipx install commitizen
-	echo "Commitizen installed successfully."
-else
-	echo "Commitizen is already installed."
-fi
+pipx install commitizen || echo "Commitizen installation skipped."
 
 # Ensure Flatpak is set up.
 if ! command -v flatpak &>/dev/null; then
@@ -102,51 +101,32 @@ if ! command -v flatpak &>/dev/null; then
 	exit 1
 fi
 
-# Enable Flathub if not already enabled.
+# Enable Flathub.
 if ! flatpak remote-list | grep -q flathub; then
 	echo "Adding Flathub repository to Flatpak..."
 	sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 fi
 
-# Install Rust properly using rustup (not dnf).
+# Install Rust using rustup.
+echo "Installing Rust..."
 if ! command -v rustup &>/dev/null; then
-	echo "Installing Rust..."
-	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o rustup-install.sh
-	chmod +x rustup-install.sh
-	./rustup-install.sh -y
-	rm rustup-install.sh
-	export PATH="$CARGO_BIN:$PATH"
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 	echo 'export PATH="$HOME/.cargo/bin:$PATH"' >>"$HOME/.zshrc"
-	rustup update
-	echo "Rust installed successfully."
 else
-	echo "Rust is already installed. Updating..."
-	rustup update
+	rustup self update
 fi
 
 # Install Go-Swagger.
 echo "Installing Go-Swagger..."
-if ! command -v swagger &>/dev/null; then
-	sudo dnf install -y yum-utils
-	sudo rpm --import 'https://dl.cloudsmith.io/public/go-swagger/go-swagger/gpg.2F8CB673971B5C9E.key'
-	curl -1sLf 'https://dl.cloudsmith.io/public/go-swagger/go-swagger/config.rpm.txt?distro=fedora&codename=any-version' >/tmp/go-swagger-go-swagger.repo
-	sudo dnf config-manager --add-repo '/tmp/go-swagger-go-swagger.repo'
-	sudo dnf install -y swagger
-	echo "Go-Swagger installed successfully."
-else
-	echo "Go-Swagger is already installed."
-fi
+go install github.com/go-swagger/go-swagger/cmd/swagger@latest || echo "Go-Swagger installation skipped."
 
-# Install Flutter.
+# Install Flutter SDK.
 if [ ! -d "$FLUTTER_SDK_DIR" ]; then
 	echo "Downloading Flutter SDK..."
 	curl -o "$FLUTTER_TAR" -L https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz
 	mkdir -p "$HOME/development"
 	tar -xf "$FLUTTER_TAR" -C "$HOME/development/"
 	rm "$FLUTTER_TAR"
-	echo "Flutter SDK installed successfully."
-else
-	echo "Flutter is already installed."
 fi
 
 # Add Flutter to PATH.
@@ -155,29 +135,34 @@ if ! grep -q 'export PATH="$HOME/development/flutter/bin:$PATH"' "$HOME/.zshrc";
 	export PATH="$HOME/development/flutter/bin:$PATH"
 fi
 
-# Install Android Studio.
+# Install Android Studio via Flatpak.
 echo "Installing Android Studio..."
-if ! flatpak list | grep -q "Android Studio"; then
-	flatpak install -y flathub com.google.AndroidStudio
-else
-	echo "Android Studio is already installed."
-fi
+flatpak install -y flathub com.google.AndroidStudio || echo "Android Studio installation skipped."
 
-# Verify Flutter installation.
-echo "Running flutter doctor..."
-flutter doctor
+# Install Android SDK.
+if [ ! -d "$ANDROID_SDK" ]; then
+	echo "Installing Android SDK..."
+	mkdir -p "$ANDROID_SDK"
+	flatpak run com.google.AndroidStudio --install-sdk || echo "Android SDK installation skipped."
+fi
 
 # Accept Android SDK licenses.
-echo "Accepting Android SDK licenses..."
-flutter doctor --android-licenses
+if [ -d "$ANDROID_SDK" ]; then
+	echo "Accepting Android SDK licenses..."
+	yes | "$FLUTTER_SDK_DIR/bin/flutter" doctor --android-licenses
+fi
+
+# Install Google Chrome via Flatpak.
+echo "Installing Google Chrome..."
+flatpak install -y flathub com.google.Chrome || echo "Google Chrome installation skipped."
+
+# Install WezTerm via Flatpak.
+echo "Installing WezTerm..."
+flatpak install -y flathub org.wezfurlong.wezterm || echo "WezTerm installation skipped."
 
 # Install Starship.
-if ! command -v starship &>/dev/null; then
-	curl -sS https://starship.rs/install.sh -o starship-install.sh
-	chmod +x starship-install.sh
-	./starship-install.sh
-	rm starship-install.sh
-fi
+echo "Installing Starship..."
+curl -sS https://starship.rs/install.sh | sh || echo "Starship installation skipped."
 
 # Ensure Starship is initialized in Zsh.
 if ! grep -q 'eval "$(starship init zsh)"' "$HOME/.zshrc"; then
@@ -187,16 +172,6 @@ fi
 # Install oxi (Rust-based `sd`).
 if ! command -v sd &>/dev/null; then
 	cargo install sd
-fi
-
-# Install fonts.
-sudo dnf install -y font-fira-code-nerd-font || true
-
-# Install GUI applications via Flatpak (without Docker).
-echo "Installing GUI applications via Flatpak..."
-if ! flatpak install --noninteractive -y wezterm; then
-	echo "Error: Flatpak application installation failed."
-	exit 1
 fi
 
 # Ensure Stow is installed.
@@ -215,16 +190,9 @@ fi
 # Set Zsh as default shell.
 sudo chsh -s "$(which zsh)" "$USER"
 
+# Run flutter doctor.
+echo "Running flutter doctor..."
+"$FLUTTER_SDK_DIR/bin/flutter" doctor
+
 echo "========== Installation Completed: $(date) =========="
-
-# Prompt user to restart the system.
-echo "Installation is complete! Restart your system for all changes to take effect."
-read -rp "Would you like to restart now? (y/N): " RESTART_CONFIRM
-if [[ "$RESTART_CONFIRM" == "y" || "$RESTART_CONFIRM" == "Y" ]]; then
-	echo "Restarting system..."
-	sudo reboot
-else
-	echo "Restart skipped. Please restart your system manually later."
-fi
-
-exit 0
+echo "✅ Please restart your system for changes to take effect."
