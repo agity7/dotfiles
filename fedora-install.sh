@@ -86,20 +86,12 @@ else
 fi
 
 # Ensure pipx is in PATH.
-if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$HOME/.zshrc"; then
-	echo 'export PATH="$HOME/.local/bin:$PATH"' >>"$HOME/.zshrc"
-	export PATH="$HOME/.local/bin:$PATH"
-fi
+export PATH="$HOME/.local/bin:$PATH"
+echo 'export PATH="$HOME/.local/bin:$PATH"' >>"$HOME/.zshrc"
 
 # Install Commitizen.
 echo "Installing Commitizen..."
 pipx install commitizen || echo "Commitizen installation skipped."
-
-# Ensure Flatpak is set up.
-if ! command -v flatpak &>/dev/null; then
-	echo "Error: Flatpak installation failed. Exiting..."
-	exit 1
-fi
 
 # Enable Flathub.
 if ! flatpak remote-list | grep -q flathub; then
@@ -115,6 +107,7 @@ if ! command -v rustup &>/dev/null; then
 else
 	rustup self update
 fi
+export PATH="$HOME/.cargo/bin:$PATH"
 
 # Install Go-Swagger.
 echo "Installing Go-Swagger..."
@@ -130,31 +123,38 @@ if [ ! -d "$FLUTTER_SDK_DIR" ]; then
 fi
 
 # Add Flutter to PATH.
-if ! grep -q 'export PATH="$HOME/development/flutter/bin:$PATH"' "$HOME/.zshrc"; then
-	echo 'export PATH="$HOME/development/flutter/bin:$PATH"' >>"$HOME/.zshrc"
-	export PATH="$HOME/development/flutter/bin:$PATH"
-fi
+echo 'export PATH="$HOME/development/flutter/bin:$PATH"' >>"$HOME/.zshrc"
+echo 'export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"' >>"$HOME/.zshrc"
+export PATH="$HOME/development/flutter/bin:$PATH"
+export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
 
 # Install Android Studio via Flatpak.
 echo "Installing Android Studio..."
 flatpak install -y flathub com.google.AndroidStudio || echo "Android Studio installation skipped."
 
 # Install Android SDK.
-if [ ! -d "$ANDROID_SDK" ]; then
+SDKMANAGER="$ANDROID_SDK/cmdline-tools/latest/bin/sdkmanager"
+if [ ! -f "$SDKMANAGER" ]; then
 	echo "Installing Android SDK..."
 	mkdir -p "$ANDROID_SDK"
-	flatpak run com.google.AndroidStudio --install-sdk || echo "Android SDK installation skipped."
+	flatpak run com.google.AndroidStudio --install-sdk
+	yes | "$ANDROID_SDK/cmdline-tools/bin/sdkmanager" --install "cmdline-tools;latest"
 fi
 
 # Accept Android SDK licenses.
-if [ -d "$ANDROID_SDK" ]; then
-	echo "Accepting Android SDK licenses..."
-	yes | "$FLUTTER_SDK_DIR/bin/flutter" doctor --android-licenses
+echo "Accepting Android SDK licenses..."
+yes | "$FLUTTER_SDK_DIR/bin/flutter" doctor --android-licenses
+
+# Ensure Android Studio is detected.
+ANDROID_STUDIO_PATH=$(flatpak info --show-location com.google.AndroidStudio)
+if [ -d "$ANDROID_STUDIO_PATH" ]; then
+	flutter config --android-studio-dir="$ANDROID_STUDIO_PATH"
 fi
 
 # Install Google Chrome via Flatpak.
 echo "Installing Google Chrome..."
 flatpak install -y flathub com.google.Chrome || echo "Google Chrome installation skipped."
+flutter config --set CHROME_EXECUTABLE="/usr/bin/flatpak run com.google.Chrome"
 
 # Install WezTerm via Flatpak.
 echo "Installing WezTerm..."
@@ -162,17 +162,10 @@ flatpak install -y flathub org.wezfurlong.wezterm || echo "WezTerm installation 
 
 # Install Starship.
 echo "Installing Starship..."
-curl -sS https://starship.rs/install.sh | sh || echo "Starship installation skipped."
+curl -sS https://starship.rs/install.sh | sh -s -- -y
 
 # Ensure Starship is initialized in Zsh.
-if ! grep -q 'eval "$(starship init zsh)"' "$HOME/.zshrc"; then
-	echo 'eval "$(starship init zsh)"' >>"$HOME/.zshrc"
-fi
-
-# Install oxi (Rust-based `sd`).
-if ! command -v sd &>/dev/null; then
-	cargo install sd
-fi
+echo 'eval "$(starship init zsh)"' >>"$HOME/.zshrc"
 
 # Ensure Stow is installed.
 if ! command -v stow &>/dev/null; then
@@ -180,7 +173,7 @@ if ! command -v stow &>/dev/null; then
 	exit 1
 fi
 
-# Stow only if directories exist.
+# Stow dotfiles.
 [ -d "$DOTFILES_DIR/zsh" ] && stow zsh
 [ -d "$DOTFILES_DIR/nvim" ] && stow nvim
 [ -d "$DOTFILES_DIR/tmux" ] && stow tmux
@@ -189,6 +182,11 @@ fi
 
 # Set Zsh as default shell.
 sudo chsh -s "$(which zsh)" "$USER"
+
+# Ensure PATH updates take effect.
+source "$HOME/.zshrc"
+source "$HOME/.bashrc"
+source "$HOME/.profile"
 
 # Run flutter doctor.
 echo "Running flutter doctor..."
