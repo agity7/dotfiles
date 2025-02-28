@@ -9,6 +9,8 @@ ANDROID_SDK="$HOME/Android/Sdk"
 CMDLINE_TOOLS="$ANDROID_SDK/cmdline-tools/latest/bin"
 LOG_FILE="$HOME/install.log"
 JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
+ANDROID_STUDIO_DIR="/opt/android-studio"
+ANDROID_STUDIO_TAR="android-studio.tar.gz"
 
 # Clear previous log file.
 >"$LOG_FILE"
@@ -50,7 +52,7 @@ sudo dnf install -y zsh \
 	golang \
 	zsh-syntax-highlighting \
 	zsh-autosuggestions \
-	nodejs npm \
+	nodejs-npm \
 	ripgrep \
 	make \
 	gcc \
@@ -59,6 +61,8 @@ sudo dnf install -y zsh \
 	zip \
 	mesa-libGLU \
 	libstdc++ \
+	lib3270-devel \
+	bzip2-libs \
 	python3 \
 	python3-pip \
 	python3-virtualenv \
@@ -74,7 +78,7 @@ sudo dnf install -y zsh \
 	exit 1
 }
 
-# Set JAVA_HOME
+# Set JAVA_HOME.
 echo "export JAVA_HOME=$JAVA_HOME" >>"$HOME/.zshrc"
 export JAVA_HOME="$JAVA_HOME"
 
@@ -131,35 +135,21 @@ echo 'export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"' >>"$
 export PATH="$HOME/development/flutter/bin:$PATH"
 export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
 
-# Install Android SDK command-line tools.
-if [ ! -f "$CMDLINE_TOOLS/sdkmanager" ]; then
-	echo "Installing Android SDK command-line tools..."
-	curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
-	unzip sdk-tools.zip -d "$ANDROID_SDK/cmdline-tools"
-	rm sdk-tools.zip
-	mv "$ANDROID_SDK/cmdline-tools/cmdline-tools" "$ANDROID_SDK/cmdline-tools/latest"
-fi
+# Install Android Studio (not using Flatpak anymore).
+echo "Installing Android Studio..."
+wget -O "$ANDROID_STUDIO_TAR" https://redirector.gvt1.com/edgedl/android/studio/ide-zips/latest/android-studio-2023.1.1-linux.tar.gz
+sudo tar -xzf "$ANDROID_STUDIO_TAR" -C /opt/
+rm "$ANDROID_STUDIO_TAR"
 
-# Accept Android SDK licenses.
-yes | "$CMDLINE_TOOLS/sdkmanager" --licenses
+# Set Android Studio environment variables.
+echo "export ANDROID_STUDIO_HOME=$ANDROID_STUDIO_DIR" >>"$HOME/.zshrc"
+echo "export PATH=\$ANDROID_STUDIO_HOME/bin:\$PATH" >>"$HOME/.zshrc"
+export ANDROID_STUDIO_HOME="$ANDROID_STUDIO_DIR"
+export PATH="$ANDROID_STUDIO_HOME/bin:$PATH"
 
-# Install Google Chrome via DNF.
-echo "Installing Google Chrome..."
-sudo dnf install -y google-chrome-stable || echo "⚠️ Google Chrome installation skipped."
-
-# Ensure Chrome is detected by Flutter.
-CHROME_PATH=$(which google-chrome)
-flutter config --enable-web
-flutter config --set CHROME_EXECUTABLE="$CHROME_PATH"
-
-# Install WezTerm via Flatpak.
-echo "Installing WezTerm..."
-flatpak install -y flathub org.wezfurlong.wezterm || echo "⚠️ WezTerm installation skipped."
-
-# Install Starship.
-echo "Installing Starship..."
-curl -sS https://starship.rs/install.sh | sh -s -- -y || echo "⚠️ Starship installation skipped."
-echo 'eval "$(starship init zsh)"' >>"$HOME/.zshrc"
+# Ensure Android Studio is detected.
+flutter config --android-studio-dir="$ANDROID_STUDIO_DIR"
+flutter config --set android-studio-java-path="$JAVA_HOME"
 
 # Ensure Stow is installed and apply dotfiles.
 if command -v stow &>/dev/null; then
@@ -169,9 +159,6 @@ if command -v stow &>/dev/null; then
 	[ -d "$DOTFILES_DIR/starship" ] && stow -d "$DOTFILES_DIR" -t "$HOME" starship
 	[ -d "$DOTFILES_DIR/wezterm" ] && stow -d "$DOTFILES_DIR" -t "$HOME" wezterm
 fi
-
-# Set Zsh as default shell.
-sudo chsh -s "$(which zsh)" "$USER"
 
 # Run Flutter doctor.
 echo "Running flutter doctor..."
