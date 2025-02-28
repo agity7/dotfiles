@@ -67,7 +67,8 @@ sudo dnf install -y zsh \
 	cmake \
 	ninja-build \
 	gtk3-devel \
-	java-17-openjdk || {
+	java-17-openjdk \
+	google-chrome-stable || {
 	echo "❌ Error: DNF package installation failed."
 	exit 1
 }
@@ -145,12 +146,12 @@ fi
 # Accept Android SDK licenses.
 yes | "$CMDLINE_TOOLS/sdkmanager" --licenses
 
-# Install Google Chrome via Flatpak.
+# Install Google Chrome via DNF.
 echo "Installing Google Chrome..."
-flatpak install -y flathub com.google.Chrome || echo "⚠️ Google Chrome installation skipped."
+sudo dnf install -y google-chrome-stable || echo "⚠️ Google Chrome installation skipped."
 
 # Ensure Chrome is detected by Flutter.
-CHROME_PATH=$(which google-chrome || echo "/usr/bin/flatpak run com.google.Chrome")
+CHROME_PATH=$(which google-chrome)
 flutter config --enable-web
 flutter config --set CHROME_EXECUTABLE="$CHROME_PATH"
 
