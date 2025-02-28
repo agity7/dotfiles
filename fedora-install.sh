@@ -98,11 +98,9 @@ fi
 
 # Ensure Stow is installed and apply dotfiles BEFORE modifying .zshrc.
 if command -v stow &>/dev/null; then
-	[ -d "$DOTFILES_DIR/zsh" ] && stow -d "$DOTFILES_DIR" -t "$HOME" zsh
-	[ -d "$DOTFILES_DIR/nvim" ] && stow -d "$DOTFILES_DIR" -t "$HOME" nvim
-	[ -d "$DOTFILES_DIR/tmux" ] && stow -d "$DOTFILES_DIR" -t "$HOME" tmux
-	[ -d "$DOTFILES_DIR/starship" ] && stow -d "$DOTFILES_DIR" -t "$HOME" starship
-	[ -d "$DOTFILES_DIR/wezterm" ] && stow -d "$DOTFILES_DIR" -t "$HOME" wezterm
+	for dir in zsh nvim tmux starship wezterm; do
+		[ -d "$DOTFILES_DIR/$dir" ] && stow -d "$DOTFILES_DIR" -t "$HOME" "$dir"
+	done
 fi
 
 # Set JAVA_HOME.
