@@ -8,6 +8,7 @@ FLUTTER_TAR="$HOME/Downloads/flutter_linux_3.29.0-stable.tar.xz"
 ANDROID_SDK="$HOME/Android/Sdk"
 CMDLINE_TOOLS="$ANDROID_SDK/cmdline-tools/latest/bin"
 LOG_FILE="$HOME/install.log"
+JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
 
 # Clear previous log file.
 >"$LOG_FILE"
@@ -73,6 +74,10 @@ sudo dnf install -y zsh \
 	exit 1
 }
 
+# Set JAVA_HOME
+echo "export JAVA_HOME=$JAVA_HOME" >>"$HOME/.zshrc"
+export JAVA_HOME="$JAVA_HOME"
+
 # Install pipx if missing.
 echo "Installing pipx..."
 if ! command -v pipx &>/dev/null; then
@@ -126,21 +131,13 @@ echo 'export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"' >>"$
 export PATH="$HOME/development/flutter/bin:$PATH"
 export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
 
-# Install Android Studio via Flatpak.
-echo "Installing Android Studio..."
-flatpak install -y flathub com.google.AndroidStudio || echo "⚠️ Android Studio installation skipped."
-
 # Install Android SDK command-line tools.
 if [ ! -f "$CMDLINE_TOOLS/sdkmanager" ]; then
 	echo "Installing Android SDK command-line tools..."
-	yes | flatpak run com.google.AndroidStudio --install-sdk
-	yes | "$CMDLINE_TOOLS/sdkmanager" --install "cmdline-tools;latest"
-fi
-
-# Ensure Android Studio is detected.
-ANDROID_STUDIO_PATH=$(flatpak info --show-location com.google.AndroidStudio)
-if [ -d "$ANDROID_STUDIO_PATH" ]; then
-	flutter config --android-studio-dir="$ANDROID_STUDIO_PATH"
+	curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
+	unzip sdk-tools.zip -d "$ANDROID_SDK/cmdline-tools"
+	rm sdk-tools.zip
+	mv "$ANDROID_SDK/cmdline-tools/cmdline-tools" "$ANDROID_SDK/cmdline-tools/latest"
 fi
 
 # Accept Android SDK licenses.
