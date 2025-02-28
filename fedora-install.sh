@@ -10,7 +10,13 @@ CMDLINE_TOOLS="$ANDROID_SDK/cmdline-tools/latest/bin"
 LOG_FILE="$HOME/install.log"
 JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
 ANDROID_STUDIO_DIR="/opt/android-studio"
-ANDROID_STUDIO_TAR="android-studio.tar.gz"
+ANDROID_STUDIO_VERSION="2024.2.2.15"
+ANDROID_STUDIO_TAR="android-studio-${ANDROID_STUDIO_VERSION}-linux.tar.gz"
+ANDROID_STUDIO_URL="https://redirector.gvt1.com/edgedl/android/studio/install/${ANDROID_STUDIO_VERSION}/${ANDROID_STUDIO_TAR}"
+FLUTTER_DOWNLOAD_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz"
+RUST_INSTALL_URL="https://sh.rustup.rs"
+FLATPAK_REPO_URL="https://dl.flathub.org/repo/flathub.flatpakrepo"
+GO_SWAGGER_URL="github.com/go-swagger/go-swagger/cmd/swagger@latest"
 
 # Clear previous log file.
 >"$LOG_FILE"
@@ -103,13 +109,13 @@ pipx install commitizen || echo "⚠️ Commitizen installation skipped."
 # Enable Flathub.
 if ! flatpak remote-list | grep -q flathub; then
 	echo "Adding Flathub repository to Flatpak..."
-	sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+	sudo flatpak remote-add --if-not-exists flathub "$FLATPAK_REPO_URL"
 fi
 
 # Install Rust using rustup.
 echo "Installing Rust..."
 if ! command -v rustup &>/dev/null; then
-	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+	curl --proto '=https' --tlsv1.2 -sSf "$RUST_INSTALL_URL" | sh -s -- -y
 	echo 'export PATH="$HOME/.cargo/bin:$PATH"' >>"$HOME/.zshrc"
 	source "$HOME/.zshrc"
 else
@@ -118,12 +124,12 @@ fi
 
 # Install Go-Swagger.
 echo "Installing Go-Swagger..."
-go install github.com/go-swagger/go-swagger/cmd/swagger@latest || echo "⚠️ Go-Swagger installation skipped."
+go install "$GO_SWAGGER_URL" || echo "⚠️ Go-Swagger installation skipped."
 
 # Install Flutter SDK.
 if [ ! -d "$FLUTTER_SDK_DIR" ]; then
 	echo "Downloading Flutter SDK..."
-	curl -o "$FLUTTER_TAR" -L https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz
+	curl -o "$FLUTTER_TAR" -L "$FLUTTER_DOWNLOAD_URL"
 	mkdir -p "$HOME/development"
 	tar -xf "$FLUTTER_TAR" -C "$HOME/development/"
 	rm "$FLUTTER_TAR"
@@ -135,9 +141,12 @@ echo 'export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"' >>"$
 export PATH="$HOME/development/flutter/bin:$PATH"
 export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
 
-# Install Android Studio (not using Flatpak anymore).
+# Download and install Android Studio.
+echo "Downloading Android Studio..."
+wget -O "$ANDROID_STUDIO_TAR" "$ANDROID_STUDIO_URL"
+
+# Extract and install Android Studio.
 echo "Installing Android Studio..."
-wget -O "$ANDROID_STUDIO_TAR" https://redirector.gvt1.com/edgedl/android/studio/ide-zips/latest/android-studio-2023.1.1-linux.tar.gz
 sudo tar -xzf "$ANDROID_STUDIO_TAR" -C /opt/
 rm "$ANDROID_STUDIO_TAR"
 
