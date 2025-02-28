@@ -170,6 +170,16 @@ echo "export PATH=\$ANDROID_STUDIO_HOME/bin:\$PATH" >>"$HOME/.zshrc"
 export ANDROID_STUDIO_HOME="$ANDROID_STUDIO_DIR"
 export PATH="$ANDROID_STUDIO_HOME/bin:$PATH"
 
+# Launch Android Studio to complete setup.
+echo "Launching Android Studio for initial setup..."
+/opt/android-studio/bin/studio.sh
+
+# Wait for user to close Android Studio before continuing.
+echo "Waiting for Android Studio to close..."
+while pgrep -f studio.sh >/dev/null; do
+	sleep 2
+done
+
 # Ensure Android Studio is detected.
 flutter config --android-studio-dir="$ANDROID_STUDIO_DIR"
 
