@@ -92,6 +92,7 @@ sudo dnf install -y zsh \
 if [ -f "$HOME/.zshrc" ]; then
 	cp "$HOME/.zshrc" "$HOME/.zshrc_bak"
 	echo "Backup of .zshrc created as .zshrc_bak."
+	rm "$HOME/.zshrc"
 else
 	echo "No existing .zshrc file to back up."
 fi
