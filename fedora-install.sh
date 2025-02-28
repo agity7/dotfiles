@@ -88,12 +88,21 @@ sudo dnf install -y zsh \
 	exit 1
 }
 
-# Create a backup of any current zsh configuration file, if it exists.
+# Backup .zshrc before making any modifications.
 if [ -f "$HOME/.zshrc" ]; then
 	cp "$HOME/.zshrc" "$HOME/.zshrc_bak"
-	echo "Creating backup of existing .zshrc file..."
+	echo "Backup of .zshrc created as .zshrc_bak."
 else
 	echo "No existing .zshrc file to back up."
+fi
+
+# Ensure Stow is installed and apply dotfiles BEFORE modifying .zshrc.
+if command -v stow &>/dev/null; then
+	[ -d "$DOTFILES_DIR/zsh" ] && stow -d "$DOTFILES_DIR" -t "$HOME" zsh
+	[ -d "$DOTFILES_DIR/nvim" ] && stow -d "$DOTFILES_DIR" -t "$HOME" nvim
+	[ -d "$DOTFILES_DIR/tmux" ] && stow -d "$DOTFILES_DIR" -t "$HOME" tmux
+	[ -d "$DOTFILES_DIR/starship" ] && stow -d "$DOTFILES_DIR" -t "$HOME" starship
+	[ -d "$DOTFILES_DIR/wezterm" ] && stow -d "$DOTFILES_DIR" -t "$HOME" wezterm
 fi
 
 # Set JAVA_HOME.
@@ -194,15 +203,6 @@ flutter config --android-studio-dir="$ANDROID_STUDIO_DIR"
 # Run Flutter doctor.
 echo "Running flutter doctor..."
 flutter doctor
-
-# Ensure Stow is installed and apply dotfiles.
-if command -v stow &>/dev/null; then
-	[ -d "$DOTFILES_DIR/zsh" ] && stow -d "$DOTFILES_DIR" -t "$HOME" zsh
-	[ -d "$DOTFILES_DIR/nvim" ] && stow -d "$DOTFILES_DIR" -t "$HOME" nvim
-	[ -d "$DOTFILES_DIR/tmux" ] && stow -d "$DOTFILES_DIR" -t "$HOME" tmux
-	[ -d "$DOTFILES_DIR/starship" ] && stow -d "$DOTFILES_DIR" -t "$HOME" starship
-	[ -d "$DOTFILES_DIR/wezterm" ] && stow -d "$DOTFILES_DIR" -t "$HOME" wezterm
-fi
 
 echo "========== Installation Completed: $(date) =========="
 echo "✅ Please restart your system for changes to take effect."

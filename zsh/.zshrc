@@ -1,9 +1,9 @@
-# Starship.
+# Starship prompt.
 eval "$(starship init zsh)"
 
-# Enable syntax highlighting.
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# Enable syntax highlighting & autosuggestions.
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Customize syntax highlighting styles to disable underlining globally.
 (( ${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
@@ -15,7 +15,7 @@ done
 ZSH_HIGHLIGHT_STYLES[default]='none'
 ZSH_HIGHLIGHT_STYLES[command]='fg=#00bfff'  # Bright blue for commands.
 ZSH_HIGHLIGHT_STYLES[builtin]='fg=#00bfff'  # Bright blue for built-ins.
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#ffff00'     # Bright yellow for aliases.
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#ffff00'    # Bright yellow for aliases.
 
 # Customize auto-suggestions.
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#aaaaaa,nounderline'  # Grey for suggestions.
@@ -25,5 +25,5 @@ alias ls='ls -al'
 alias ll='ls -al'
 alias g='git'
 
-# Exports.
-export PATH="$HOME/.cargo/bin:$PATH"
+# Fix PATH issues for Fedora.
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
