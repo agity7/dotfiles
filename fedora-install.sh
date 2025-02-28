@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# To access Android Studio download links, visit:
+# https://developer.android.com/studio/archive
+
 # Define variables.
 DOTFILES_DIR="$HOME/dotfiles"
 CARGO_BIN="$HOME/.cargo/bin"
