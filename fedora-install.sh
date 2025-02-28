@@ -88,6 +88,14 @@ sudo dnf install -y zsh \
 	exit 1
 }
 
+# Create a backup of any current zsh configuration file, if it exists.
+if [ -f "$HOME/.zshrc" ]; then
+	cp "$HOME/.zshrc" "$HOME/.zshrc_bak"
+	echo "Creating backup of existing .zshrc file..."
+else
+	echo "No existing .zshrc file to back up."
+fi
+
 # Set JAVA_HOME.
 echo "export JAVA_HOME=$JAVA_HOME" >>"$HOME/.zshrc"
 export JAVA_HOME="$JAVA_HOME"
