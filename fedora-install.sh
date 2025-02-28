@@ -66,6 +66,7 @@ sudo dnf install -y zsh \
 	make \
 	gcc \
 	unzip \
+	gzip \
 	xz \
 	zip \
 	mesa-libGLU \
@@ -144,14 +145,25 @@ echo 'export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"' >>"$
 export PATH="$HOME/development/flutter/bin:$PATH"
 export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
 
-# Download and install Android Studio.
+# Remove any previous Android Studio installation.
+echo "Removing old Android Studio installation..."
+sudo rm -rf /opt/android-studio
+
+# Download Android Studio.
 echo "Downloading Android Studio..."
 wget -O "$ANDROID_STUDIO_TAR" "$ANDROID_STUDIO_URL"
 
-# Extract and install Android Studio.
-echo "Installing Android Studio..."
+# Extract Android Studio.
+echo "Extracting Android Studio..."
 sudo tar -xzf "$ANDROID_STUDIO_TAR" -C /opt/
+sudo mv /opt/android-studio-* /opt/android-studio
 rm "$ANDROID_STUDIO_TAR"
+
+# Verify the extraction.
+if [ ! -f "/opt/android-studio/bin/studio.sh" ]; then
+	echo "❌ Error: Android Studio installation failed. studio.sh not found."
+	exit 1
+fi
 
 # Set Android Studio environment variables.
 echo "export ANDROID_STUDIO_HOME=$ANDROID_STUDIO_DIR" >>"$HOME/.zshrc"
@@ -163,6 +175,10 @@ export PATH="$ANDROID_STUDIO_HOME/bin:$PATH"
 flutter config --android-studio-dir="$ANDROID_STUDIO_DIR"
 flutter config --set android-studio-java-path="$JAVA_HOME"
 
+# Run Flutter doctor.
+echo "Running flutter doctor..."
+flutter doctor
+
 # Ensure Stow is installed and apply dotfiles.
 if command -v stow &>/dev/null; then
 	[ -d "$DOTFILES_DIR/zsh" ] && stow -d "$DOTFILES_DIR" -t "$HOME" zsh
@@ -171,10 +187,6 @@ if command -v stow &>/dev/null; then
 	[ -d "$DOTFILES_DIR/starship" ] && stow -d "$DOTFILES_DIR" -t "$HOME" starship
 	[ -d "$DOTFILES_DIR/wezterm" ] && stow -d "$DOTFILES_DIR" -t "$HOME" wezterm
 fi
-
-# Run Flutter doctor.
-echo "Running flutter doctor..."
-flutter doctor
 
 echo "========== Installation Completed: $(date) =========="
 echo "✅ Please restart your system for changes to take effect."
