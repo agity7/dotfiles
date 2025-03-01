@@ -22,10 +22,6 @@
 #    - Copy the SSH key to clipboard: cat ~/.ssh/id_ed25519.pub | xclip -sel clip
 #    - Add the key to GitHub and GitLab via their web interfaces.
 #
-# 3 - Install Maestral (Minimalist Dropbox client):
-#    - Download and install from: https://maestral.app/
-#    - Follow setup instructions to link your Dropbox account.
-#
 # =====================================================
 # Manual Verification Before Running the Script
 # =====================================================
@@ -50,6 +46,11 @@ FLATPAK_REPO_URL="https://dl.flathub.org/repo/flathub.flatpakrepo"
 GO_SWAGGER_URL="github.com/go-swagger/go-swagger/cmd/swagger@latest"
 FONT_DIR="$HOME/.local/share/fonts/FiraCode"
 RUST_INSTALL_URL="https://sh.rustup.rs"
+DROPBOX_URL="https://www.dropbox.com/download?dl=packages/fedora/nautilus-dropbox-2024.04.17-1.fc39.x86_64.rpm"
+LIBREWOLF_REPO_URL="https://repo.librewolf.net/librewolf.repo"
+LIBREWOLF_REPO_PATH="/etc/yum.repos.d/librewolf.repo"
+SUCCESS="[SUCCESS]"
+FAILURE="[FAILURE]"
 
 # ==================== LOGGING ====================
 >"$LOG_FILE"
@@ -58,6 +59,18 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 echo "========== 🚀 Starting Installation: $(date) =========="
 
 # ==================== FUNCTIONS ====================
+install_librewolf() {
+	if command -v librewolf &>/dev/null; then
+		echo "$SUCCESS LibreWolf is already installed. Skipping installation."
+		return
+	fi
+
+	echo "🦊 Installing LibreWolf..."
+	curl -fsSL "$LIBREWOLF_REPO_URL" | sudo tee "$LIBREWOLF_REPO_PATH"
+	sudo dnf install -y librewolf
+	echo "$SUCCESS LibreWolf installation completed."
+}
+
 install_dnf_packages() {
 	echo "📦 Installing CLI tools..."
 	sudo dnf install -y \
@@ -66,16 +79,16 @@ install_dnf_packages() {
 		wl-clipboard xclip mesa-libGLU libstdc++ bzip2-libs python3 python3-pip \
 		python3-virtualenv flatpak clang cmake ninja-build gtk3-devel java-17-openjdk \
 		google-chrome-stable
-	echo "✅ CLI tools installation completed."
+	echo "$SUCCESS CLI tools installation completed."
 }
 
 check_internet() {
 	echo "🌐 Checking Internet connectivity..."
 	if ! ping -c 3 8.8.8.8 &>/dev/null; then
-		echo "❌ Error: No Internet connection. Exiting."
+		echo "$FAILURE No Internet connection. Exiting."
 		exit 1
 	fi
-	echo "✅ Internet connection verified."
+	echo "$SUCCESS Internet connection verified."
 }
 
 download_and_extract() {
@@ -85,16 +98,29 @@ download_and_extract() {
 
 	echo "⬇️ Downloading $output..."
 	wget -O "$output" "$url" || {
-		echo "❌ Failed to download $output"
+		echo "$FAILURE Failed to download $output"
 		exit 1
 	}
 	echo "📦 Extracting $output..."
 	sudo tar -xzf "$output" -C "$dest" || {
-		echo "❌ Failed to extract $output"
+		echo "$FAILURE Failed to extract $output"
 		exit 1
 	}
 	rm "$output"
-	echo "✅ $output installation completed."
+	echo "$SUCCESS $output installation completed."
+}
+
+install_dropbox() {
+	echo "📦 Installing Dropbox (CLI Only)..."
+	if command -v dropbox &>/dev/null; then
+		echo "$SUCCESS Dropbox is already installed. Skipping installation."
+		return
+	fi
+	wget -O /tmp/nautilus-dropbox.rpm "$DROPBOX_URL"
+	sudo dnf install -y /tmp/nautilus-dropbox.rpm
+	rm /tmp/nautilus-dropbox.rpm
+	dropbox autostart y
+	echo "$SUCCESS Dropbox CLI installation completed. Use 'dropbox start' to launch it."
 }
 
 setup_dotfiles() {
@@ -104,7 +130,7 @@ setup_dotfiles() {
 			[ -d "$DOTFILES_DIR/$dir" ] && stow -d "$DOTFILES_DIR" -t "$HOME" "$dir"
 		done
 	fi
-	echo "✅ Dotfiles setup completed."
+	echo "$SUCCESS Dotfiles setup completed."
 }
 
 install_rust() {
@@ -115,7 +141,7 @@ install_rust() {
 	else
 		rustup self update
 	fi
-	echo "✅ Rust installation completed."
+	echo "$SUCCESS Rust installation completed."
 }
 
 install_pipx_commitizen() {
@@ -124,8 +150,8 @@ install_pipx_commitizen() {
 		python3 -m pip install --user pipx
 		python3 -m pipx ensurepath
 	fi
-	pipx install commitizen || echo "⚠️ Commitizen installation skipped."
-	echo "✅ Pipx & Commitizen installation completed."
+	pipx install commitizen || echo "$FAILURE Commitizen installation skipped."
+	echo "$SUCCESS Pipx & Commitizen installation completed."
 }
 
 setup_flatpak() {
@@ -133,7 +159,7 @@ setup_flatpak() {
 	if ! flatpak remote-list | grep -q flathub; then
 		sudo flatpak remote-add --if-not-exists flathub "$FLATPAK_REPO_URL"
 	fi
-	echo "✅ Flatpak setup completed."
+	echo "$SUCCESS Flatpak setup completed."
 }
 
 install_font() {
@@ -143,7 +169,7 @@ install_font() {
 	wget -O FiraCode.zip "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
 	unzip -o FiraCode.zip && rm FiraCode.zip
 	fc-cache -fv
-	echo "✅ Font installation completed."
+	echo "$SUCCESS Font installation completed."
 }
 
 install_flutter() {
@@ -151,14 +177,14 @@ install_flutter() {
 	if [ ! -d "$FLUTTER_SDK_DIR" ]; then
 		download_and_extract "$FLUTTER_DOWNLOAD_URL" "$FLUTTER_TAR" "$HOME/development"
 	fi
-	echo "✅ Flutter installation completed."
+	echo "$SUCCESS Flutter installation completed."
 }
 
 install_android_studio() {
 	echo "🤖 Installing Android Studio..."
 	sudo rm -rf "$ANDROID_STUDIO_DIR"
 	download_and_extract "$ANDROID_STUDIO_URL" "$ANDROID_STUDIO_TAR" "/opt"
-	echo "✅ Android Studio installation completed."
+	echo "$SUCCESS Android Studio installation completed."
 }
 
 # ==================== EXECUTION ====================
@@ -175,6 +201,12 @@ install_dnf_packages
 
 # Setup dotfiles.
 setup_dotfiles
+
+# Install LibreWolf.
+install_librewolf
+
+# Install Dropbox (CLI Only).
+install_dropbox
 
 # Install pipx & Commitizen.
 install_pipx_commitizen
@@ -196,12 +228,12 @@ install_android_studio
 
 # Install Go-Swagger.
 echo "🦫 Installing Go-Swagger..."
-go install "$GO_SWAGGER_URL" || echo "⚠️ Go-Swagger installation skipped."
-echo "✅ Go-Swagger installation completed."
+go install "$GO_SWAGGER_URL" || echo "$FAILURE Go-Swagger installation skipped."
+echo "$SUCCESS Go-Swagger installation completed."
 
 # Run Flutter doctor.
 echo "🦋 Running Flutter doctor..."
 flutter doctor
 
 echo "========== 🎉 Installation Completed: $(date) =========="
-echo "✅ Please restart your system for changes to take effect."
+echo "$SUCCESS Please restart your system for changes to take effect."
