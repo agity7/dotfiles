@@ -74,7 +74,7 @@ install_librewolf() {
 install_dnf_packages() {
 	echo "📦 Installing CLI tools..."
 	sudo dnf install -y \
-		gnome-tweaks zsh git fzf bat neovim tmux stow golang zsh-syntax-highlighting \
+		zsh git fzf bat neovim tmux stow golang zsh-syntax-highlighting \
 		zsh-autosuggestions nodejs-npm ripgrep make gcc unzip gzip xz zip \
 		wl-clipboard xclip mesa-libGLU libstdc++ bzip2-libs python3 python3-pip \
 		python3-virtualenv flatpak clang cmake ninja-build gtk3-devel java-17-openjdk \
