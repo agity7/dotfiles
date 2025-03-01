@@ -1,231 +1,207 @@
 #!/bin/bash
 
-# To access Android Studio download links, visit:
-# https://developer.android.com/studio/archive
+# =====================================================
+# Dev Environment Setup Script for Fedora
+# =====================================================
+# This script is dedicated to setting up a development environment on Fedora
+# for Go backend development and Flutter frontend development.
+# It installs necessary CLI tools, programming languages, frameworks,
+# and essential utilities to streamline development.
+#
+# =====================================================
+# Post-Installation Steps
+# =====================================================
+# 1 - Make Caps Lock act as Control to facilitate Neovim keybindings:
+#    - Install GNOME Tweaks using: sudo dnf install -y gnome-tweaks
+#    - Open GNOME Tweaks and remap Caps Lock to Control.
+#
+# 2 - Create and configure SSH keys for GitLab and GitHub:
+#    - Generate a new SSH key: ssh-keygen -t ed25519 -C "your_email@example.com"
+#    - Start the SSH agent: eval "$(ssh-agent -s)"
+#    - Add the SSH key: ssh-add ~/.ssh/id_ed25519
+#    - Copy the SSH key to clipboard: cat ~/.ssh/id_ed25519.pub | xclip -sel clip
+#    - Add the key to GitHub and GitLab via their web interfaces.
+#
+# 3 - Install Maestral (Minimalist Dropbox client):
+#    - Download and install from: https://maestral.app/
+#    - Follow setup instructions to link your Dropbox account.
+#
+# =====================================================
+# Manual Verification Before Running the Script
+# =====================================================
+# ✅ Verify the latest version of Android Studio at:
+#    https://developer.android.com/studio/archive
+# =====================================================
 
-# Define variables.
+# Exit immediately if a command fails.
+set -e
+
+# ==================== VARIABLES ====================
 DOTFILES_DIR="$HOME/dotfiles"
-CARGO_BIN="$HOME/.cargo/bin"
+LOG_FILE="$HOME/install.log"
 FLUTTER_SDK_DIR="$HOME/development/flutter"
 FLUTTER_TAR="$HOME/Downloads/flutter_linux_3.29.0-stable.tar.xz"
-ANDROID_SDK="$HOME/Android/Sdk"
-CMDLINE_TOOLS="$ANDROID_SDK/cmdline-tools/latest/bin"
-LOG_FILE="$HOME/install.log"
-JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
 ANDROID_STUDIO_DIR="/opt/android-studio"
 ANDROID_STUDIO_VERSION="2024.3.2.7"
 ANDROID_STUDIO_TAR="android-studio-${ANDROID_STUDIO_VERSION}-linux.tar.gz"
 ANDROID_STUDIO_URL="https://redirector.gvt1.com/edgedl/android/studio/ide-zips/${ANDROID_STUDIO_VERSION}/${ANDROID_STUDIO_TAR}"
 FLUTTER_DOWNLOAD_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz"
-RUST_INSTALL_URL="https://sh.rustup.rs"
 FLATPAK_REPO_URL="https://dl.flathub.org/repo/flathub.flatpakrepo"
 GO_SWAGGER_URL="github.com/go-swagger/go-swagger/cmd/swagger@latest"
+FONT_DIR="$HOME/.local/share/fonts/FiraCode"
+RUST_INSTALL_URL="https://sh.rustup.rs"
 
-# Clear previous log file.
+# ==================== LOGGING ====================
 >"$LOG_FILE"
-
-# Start logging.
 exec > >(tee -a "$LOG_FILE") 2>&1
-echo "========== Starting Installation: $(date) =========="
 
-# Ensure required directories exist
-mkdir -p "$ANDROID_SDK/cmdline-tools"
+echo "========== 🚀 Starting Installation: $(date) =========="
 
-# Check Internet connectivity.
-echo "Checking Internet connectivity..."
-if ! ping -c 3 8.8.8.8 &>/dev/null; then
-	echo "❌ Error: No Internet connection. Exiting."
-	exit 1
-fi
-echo "✅ Internet connection verified."
+# ==================== FUNCTIONS ====================
+install_dnf_packages() {
+	echo "📦 Installing CLI tools..."
+	sudo dnf install -y \
+		gnome-tweaks zsh git fzf bat neovim tmux stow golang zsh-syntax-highlighting \
+		zsh-autosuggestions nodejs-npm ripgrep make gcc unzip gzip xz zip \
+		wl-clipboard xclip mesa-libGLU libstdc++ bzip2-libs python3 python3-pip \
+		python3-virtualenv flatpak clang cmake ninja-build gtk3-devel java-17-openjdk \
+		google-chrome-stable
+	echo "✅ CLI tools installation completed."
+}
 
-# Ask for sudo password once and keep it cached.
-echo "Caching sudo password..."
+check_internet() {
+	echo "🌐 Checking Internet connectivity..."
+	if ! ping -c 3 8.8.8.8 &>/dev/null; then
+		echo "❌ Error: No Internet connection. Exiting."
+		exit 1
+	fi
+	echo "✅ Internet connection verified."
+}
+
+download_and_extract() {
+	local url="$1"
+	local output="$2"
+	local dest="$3"
+
+	echo "⬇️ Downloading $output..."
+	wget -O "$output" "$url" || {
+		echo "❌ Failed to download $output"
+		exit 1
+	}
+	echo "📦 Extracting $output..."
+	sudo tar -xzf "$output" -C "$dest" || {
+		echo "❌ Failed to extract $output"
+		exit 1
+	}
+	rm "$output"
+	echo "✅ $output installation completed."
+}
+
+setup_dotfiles() {
+	echo "🔧 Setting up dotfiles..."
+	if command -v stow &>/dev/null; then
+		for dir in zsh nvim tmux starship wezterm; do
+			[ -d "$DOTFILES_DIR/$dir" ] && stow -d "$DOTFILES_DIR" -t "$HOME" "$dir"
+		done
+	fi
+	echo "✅ Dotfiles setup completed."
+}
+
+install_rust() {
+	echo "🦀 Installing Rust..."
+	if ! command -v rustup &>/dev/null; then
+		curl --proto '=https' --tlsv1.2 -sSf "$RUST_INSTALL_URL" | sh -s -- -y
+		source "$HOME/.cargo/env"
+	else
+		rustup self update
+	fi
+	echo "✅ Rust installation completed."
+}
+
+install_pipx_commitizen() {
+	echo "🐍 Installing pipx & Commitizen..."
+	if ! command -v pipx &>/dev/null; then
+		python3 -m pip install --user pipx
+		python3 -m pipx ensurepath
+	fi
+	pipx install commitizen || echo "⚠️ Commitizen installation skipped."
+	echo "✅ Pipx & Commitizen installation completed."
+}
+
+setup_flatpak() {
+	echo "📦 Setting up Flatpak..."
+	if ! flatpak remote-list | grep -q flathub; then
+		sudo flatpak remote-add --if-not-exists flathub "$FLATPAK_REPO_URL"
+	fi
+	echo "✅ Flatpak setup completed."
+}
+
+install_font() {
+	echo "🔠 Installing Fira Code Nerd Font Mono..."
+	mkdir -p "$FONT_DIR"
+	cd "$FONT_DIR"
+	wget -O FiraCode.zip "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
+	unzip -o FiraCode.zip && rm FiraCode.zip
+	fc-cache -fv
+	echo "✅ Font installation completed."
+}
+
+install_flutter() {
+	echo "🦋 Installing Flutter SDK..."
+	if [ ! -d "$FLUTTER_SDK_DIR" ]; then
+		download_and_extract "$FLUTTER_DOWNLOAD_URL" "$FLUTTER_TAR" "$HOME/development"
+	fi
+	echo "✅ Flutter installation completed."
+}
+
+install_android_studio() {
+	echo "🤖 Installing Android Studio..."
+	sudo rm -rf "$ANDROID_STUDIO_DIR"
+	download_and_extract "$ANDROID_STUDIO_URL" "$ANDROID_STUDIO_TAR" "/opt"
+	echo "✅ Android Studio installation completed."
+}
+
+# ==================== EXECUTION ====================
+check_internet
+
+# Cache sudo password.
 sudo -v
 while sudo -v; do sleep 60; done 2>/dev/null &
 
-# Update Fedora system.
-echo "Updating Fedora system..."
-if ! sudo dnf update -y; then
-	echo "❌ Error: DNF update failed."
-	exit 1
-fi
+# System update & CLI tool installation.
+echo "🔄 Updating Fedora system..."
+sudo dnf update -y
+install_dnf_packages
 
-# Install CLI tools.
-echo "Installing CLI tools..."
-sudo dnf install -y zsh \
-	git \
-	fzf \
-	bat \
-	neovim \
-	tmux \
-	stow \
-	golang \
-	zsh-syntax-highlighting \
-	zsh-autosuggestions \
-	nodejs-npm \
-	ripgrep \
-	make \
-	gcc \
-	unzip \
-	gzip \
-	xz \
-	zip \
-	wl-clipboard \
-	mesa-libGLU \
-	libstdc++ \
-	lib3270-devel \
-	bzip2-libs \
-	python3 \
-	python3-pip \
-	python3-virtualenv \
-	flatpak \
-	clang \
-	cmake \
-	ninja-build \
-	gtk3-devel \
-	java-17-openjdk \
-	google-chrome-stable || {
-	echo "❌ Error: DNF package installation failed."
-	exit 1
-}
+# Setup dotfiles.
+setup_dotfiles
 
-# Backup .zshrc before making any modifications.
-if [ -f "$HOME/.zshrc" ]; then
-	cp "$HOME/.zshrc" "$HOME/.zshrc_bak"
-	echo "Backup of .zshrc created as .zshrc_bak."
-	rm "$HOME/.zshrc"
-else
-	echo "No existing .zshrc file to back up."
-fi
-
-# Ensure Stow is installed and apply dotfiles BEFORE modifying .zshrc.
-if command -v stow &>/dev/null; then
-	for dir in zsh nvim tmux starship wezterm; do
-		[ -d "$DOTFILES_DIR/$dir" ] && stow -d "$DOTFILES_DIR" -t "$HOME" "$dir"
-	done
-fi
-
-# Set JAVA_HOME.
-echo "export JAVA_HOME=$JAVA_HOME" >>"$HOME/.zshrc"
-export JAVA_HOME="$JAVA_HOME"
-
-# Install pipx if missing.
-echo "Installing pipx..."
-if ! command -v pipx &>/dev/null; then
-	python3 -m pip install --user pipx
-	python3 -m pipx ensurepath
-	echo "✅ pipx installed."
-else
-	echo "✅ pipx is already installed."
-fi
-
-# Ensure pipx is in PATH.
-export PATH="$HOME/.local/bin:$PATH"
-echo 'export PATH="$HOME/.local/bin:$PATH"' >>"$HOME/.zshrc"
-
-# Install Commitizen.
-echo "Installing Commitizen..."
-pipx install commitizen || echo "⚠️ Commitizen installation skipped."
+# Install pipx & Commitizen.
+install_pipx_commitizen
 
 # Enable Flathub.
-if ! flatpak remote-list | grep -q flathub; then
-	echo "Adding Flathub repository to Flatpak..."
-	sudo flatpak remote-add --if-not-exists flathub "$FLATPAK_REPO_URL"
-fi
+setup_flatpak
 
-# Install Rust using rustup.
-echo "Installing Rust..."
-if ! command -v rustup &>/dev/null; then
-	curl --proto '=https' --tlsv1.2 -sSf "$RUST_INSTALL_URL" | sh -s -- -y
-	echo 'export PATH="$HOME/.cargo/bin:$PATH"' >>"$HOME/.zshrc"
-	source "$HOME/.zshrc"
-else
-	rustup self update
-fi
+# Install Rust.
+install_rust
 
 # Install Fira Code Nerd Font Mono.
-echo "Installing Fira Code Nerd Font Mono..."
-
-# Define font directory.
-FONT_DIR="$HOME/.local/share/fonts/FiraCode"
-
-# Create font directory if it doesn't exist.
-mkdir -p "$FONT_DIR"
-
-# Download latest Fira Code Nerd Font Mono.
-cd "$FONT_DIR"
-wget -O FiraCode.zip "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
-
-# Unzip the font and remove the archive.
-unzip -o FiraCode.zip
-rm FiraCode.zip
-
-# Refresh font cache.
-fc-cache -fv
-
-echo "✅ Fira Code Nerd Font Mono installed."
-
-# Install Go-Swagger.
-echo "Installing Go-Swagger..."
-go install "$GO_SWAGGER_URL" || echo "⚠️ Go-Swagger installation skipped."
+install_font
 
 # Install Flutter SDK.
-if [ ! -d "$FLUTTER_SDK_DIR" ]; then
-	echo "Downloading Flutter SDK..."
-	curl -o "$FLUTTER_TAR" -L "$FLUTTER_DOWNLOAD_URL"
-	mkdir -p "$HOME/development"
-	tar -xf "$FLUTTER_TAR" -C "$HOME/development/"
-	rm "$FLUTTER_TAR"
-fi
+install_flutter
 
-# Add Flutter & Dart to PATH.
-echo 'export PATH="$HOME/development/flutter/bin:$PATH"' >>"$HOME/.zshrc"
-echo 'export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"' >>"$HOME/.zshrc"
-export PATH="$HOME/development/flutter/bin:$PATH"
-export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
+# Install Android Studio.
+install_android_studio
 
-# Remove any previous Android Studio installation.
-echo "Removing old Android Studio installation..."
-sudo rm -rf /opt/android-studio
-
-# Download Android Studio.
-echo "Downloading Android Studio..."
-wget -O "$ANDROID_STUDIO_TAR" "$ANDROID_STUDIO_URL"
-
-# Extract Android Studio.
-echo "Extracting Android Studio..."
-sudo tar -xzf "$ANDROID_STUDIO_TAR" -C /opt/
-rm "$ANDROID_STUDIO_TAR"
-
-# Verify the extraction.
-if [ ! -f "/opt/android-studio/bin/studio.sh" ]; then
-	echo "❌ Error: Android Studio installation failed. studio.sh not found."
-	exit 1
-fi
-
-# Set Android Studio environment variables.
-echo "export ANDROID_STUDIO_HOME=$ANDROID_STUDIO_DIR" >>"$HOME/.zshrc"
-echo "export PATH=\$ANDROID_STUDIO_HOME/bin:\$PATH" >>"$HOME/.zshrc"
-export ANDROID_STUDIO_HOME="$ANDROID_STUDIO_DIR"
-export PATH="$ANDROID_STUDIO_HOME/bin:$PATH"
-
-# Launch Android Studio to complete setup.
-echo "Launching Android Studio for initial setup..."
-/opt/android-studio/bin/studio.sh
-
-# Wait for user to close Android Studio before continuing.
-echo "Waiting for Android Studio to close..."
-while pgrep -f studio.sh >/dev/null; do
-	sleep 2
-done
-
-# Ensure Android Studio is detected.
-flutter config --android-studio-dir="$ANDROID_STUDIO_DIR"
+# Install Go-Swagger.
+echo "🦫 Installing Go-Swagger..."
+go install "$GO_SWAGGER_URL" || echo "⚠️ Go-Swagger installation skipped."
+echo "✅ Go-Swagger installation completed."
 
 # Run Flutter doctor.
-echo "Running flutter doctor..."
+echo "🦋 Running Flutter doctor..."
 flutter doctor
 
-echo "========== Installation Completed: $(date) =========="
+echo "========== 🎉 Installation Completed: $(date) =========="
 echo "✅ Please restart your system for changes to take effect."

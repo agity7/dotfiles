@@ -1,7 +1,7 @@
 # Starship prompt.
 eval "$(starship init zsh)"
 
-# Unset SSH_ASKPASS to avoid issues with GPG.
+# Unset SSH_ASKPASS to avoid issues with ksshaskpass.
 unset SSH_ASKPASS
 
 # Enable syntax highlighting & autosuggestions.
@@ -32,24 +32,11 @@ alias vi="nvim"
 alias v="nvim"
 alias cat='bat'
 
-# Dynamically added exports.
+# Exports.
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/development/flutter/bin:$PATH"
 export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
-export ANDROID_STUDIO_HOME=/opt/android-studio
 export PATH=$ANDROID_STUDIO_HOME/bin:$PATH
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/development/flutter/bin:$PATH"
-export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
 export ANDROID_STUDIO_HOME=/opt/android-studio
-export PATH=$ANDROID_STUDIO_HOME/bin:$PATH
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/development/flutter/bin:$PATH"
-export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
-export ANDROID_STUDIO_HOME=/opt/android-studio
-export PATH=$ANDROID_STUDIO_HOME/bin:$PATH
