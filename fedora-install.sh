@@ -55,6 +55,8 @@ fi
 echo "Installing CLI tools..."
 sudo dnf install -y zsh \
 	git \
+	fzf \
+	bat \
 	neovim \
 	tmux \
 	stow \
@@ -69,6 +71,7 @@ sudo dnf install -y zsh \
 	gzip \
 	xz \
 	zip \
+	wl-clipboard \
 	mesa-libGLU \
 	libstdc++ \
 	lib3270-devel \
@@ -77,7 +80,6 @@ sudo dnf install -y zsh \
 	python3-pip \
 	python3-virtualenv \
 	flatpak \
-	fira-code-fonts \
 	clang \
 	cmake \
 	ninja-build \
@@ -141,6 +143,28 @@ if ! command -v rustup &>/dev/null; then
 else
 	rustup self update
 fi
+
+# Install Fira Code Nerd Font Mono.
+echo "Installing Fira Code Nerd Font Mono..."
+
+# Define font directory.
+FONT_DIR="$HOME/.local/share/fonts/FiraCode"
+
+# Create font directory if it doesn't exist.
+mkdir -p "$FONT_DIR"
+
+# Download latest Fira Code Nerd Font Mono.
+cd "$FONT_DIR"
+wget -O FiraCode.zip "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
+
+# Unzip the font and remove the archive.
+unzip -o FiraCode.zip
+rm FiraCode.zip
+
+# Refresh font cache.
+fc-cache -fv
+
+echo "✅ Fira Code Nerd Font Mono installed."
 
 # Install Go-Swagger.
 echo "Installing Go-Swagger..."

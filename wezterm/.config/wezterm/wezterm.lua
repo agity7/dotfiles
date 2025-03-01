@@ -10,8 +10,8 @@ config = {
 	window_decorations = "RESIZE",
 	default_cursor_style = "BlinkingBar",
 	color_scheme = "matrix",
-	font = wezterm.font("FiraCode Nerd Font Mono", { weight = "Regular", stretch = "Normal", style = "Normal" }),
-	font_size = 18,
+	font = wezterm.font("Fira Code", { weight = "Regular", stretch = "Normal", style = "Normal" }),
+	font_size = 15,
 	line_height = 1,
 
 	-- UI.

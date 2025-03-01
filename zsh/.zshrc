@@ -1,6 +1,9 @@
 # Starship prompt.
 eval "$(starship init zsh)"
 
+# Unset SSH_ASKPASS to avoid issues with GPG.
+unset SSH_ASKPASS
+
 # Enable syntax highlighting & autosuggestions.
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -24,6 +27,29 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#aaaaaa,nounderline'  # Grey for suggestions
 alias ls='ls -al'
 alias ll='ls -al'
 alias g='git'
+alias vim="nvim"
+alias vi="nvim"
+alias v="nvim"
+alias cat='bat'
 
 # Dynamically added exports.
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/development/flutter/bin:$PATH"
+export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
+export ANDROID_STUDIO_HOME=/opt/android-studio
+export PATH=$ANDROID_STUDIO_HOME/bin:$PATH
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/development/flutter/bin:$PATH"
+export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
+export ANDROID_STUDIO_HOME=/opt/android-studio
+export PATH=$ANDROID_STUDIO_HOME/bin:$PATH
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/development/flutter/bin:$PATH"
+export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
+export ANDROID_STUDIO_HOME=/opt/android-studio
+export PATH=$ANDROID_STUDIO_HOME/bin:$PATH

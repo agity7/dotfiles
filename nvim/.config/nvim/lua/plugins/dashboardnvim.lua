@@ -78,7 +78,7 @@ return {
 						action = "Mason",
 					},
 					{
-						icon = " ",
+						icon = "󰩈 ",
 						icon_hl = "DashboardIcon",
 						desc = "Quit",
 						desc_hl = "DashboardDesc",
