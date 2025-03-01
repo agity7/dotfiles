@@ -25,5 +25,5 @@ alias ls='ls -al'
 alias ll='ls -al'
 alias g='git'
 
-# Fix PATH issues for Fedora.
+# Dynamically added exports.
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
