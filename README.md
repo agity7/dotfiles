@@ -29,3 +29,11 @@ chmod +x fedora-install.sh && ./{DISTRO}-install.sh
 | `functions.sh`        | Contains all installation functions (Docker, Flutter, AMD GPU fixes, etc.).    |
 | `vars.sh`             | Stores global variables (download URLs, repo paths, file locations).           |
 | `dnf-packages.txt`    | List of all packages to be installed via `dnf`.                                |
+
+## 🛠️ Checking If AMDGPU is Properly Enabled
+
+Run the following command:
+
+```sh
+glxinfo | grep "OpenGL renderer string"
+```
