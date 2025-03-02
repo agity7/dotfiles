@@ -12,8 +12,6 @@
 # Post-Installation Steps
 # =====================================================
 # 1 - Make Caps Lock act as Control to facilitate Neovim keybindings:
-#    - Install GNOME Tweaks using: sudo dnf install -y gnome-tweaks
-#    - Open GNOME Tweaks and remap Caps Lock to Control.
 #
 # 2 - Create and configure SSH keys for GitLab and GitHub:
 #    - Generate a new SSH key: ssh-keygen -t ed25519 -C "your_email@example.com"
@@ -25,7 +23,7 @@
 # =====================================================
 # Manual Verification Before Running the Script
 # =====================================================
-# ✅ Verify the latest version of Android Studio at:
+# 1 - Verify the latest version of Android Studio at:
 #    https://developer.android.com/studio/archive
 # =====================================================
 
@@ -49,6 +47,8 @@ RUST_INSTALL_URL="https://sh.rustup.rs"
 DROPBOX_URL="https://www.dropbox.com/download?dl=packages/fedora/nautilus-dropbox-2024.04.17-1.fc39.x86_64.rpm"
 LIBREWOLF_REPO_URL="https://repo.librewolf.net/librewolf.repo"
 LIBREWOLF_REPO_PATH="/etc/yum.repos.d/librewolf.repo"
+DOCKER_DESKTOP_RPM_URL="https://desktop.docker.com/linux/main/amd64/docker-desktop-x86_64.rpm"
+DOCKER_DESKTOP_RPM="/tmp/docker-desktop-x86_64.rpm"
 SUCCESS="[SUCCESS]"
 FAILURE="[FAILURE]"
 
@@ -59,6 +59,27 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 echo "========== 🚀 Starting Installation: $(date) =========="
 
 # ==================== FUNCTIONS ====================
+install_docker() {
+	echo "🐳 Installing Docker Desktop..."
+	if command -v docker &>/dev/null; then
+		echo "$SUCCESS Docker is already installed. Skipping installation."
+		return
+	fi
+	echo "🔧 Setting up Docker repository..."
+	sudo dnf -y install dnf-plugins-core
+	sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+	echo "$SUCCESS Docker repository added."
+	echo "⬇️ Downloading Docker Desktop..."
+	wget -O "$DOCKER_DESKTOP_RPM" "$DOCKER_DESKTOP_RPM_URL"
+	echo "📦 Installing Docker Desktop..."
+	sudo dnf install -y "$DOCKER_DESKTOP_RPM"
+	rm -f "$DOCKER_DESKTOP_RPM"
+	echo "✅ Enabling and starting Docker Desktop..."
+	systemctl --user enable docker-desktop
+	systemctl --user start docker-desktop
+	echo "$SUCCESS Docker Desktop installation completed."
+}
+
 install_librewolf() {
 	if command -v librewolf &>/dev/null; then
 		echo "$SUCCESS LibreWolf is already installed. Skipping installation."
@@ -74,10 +95,10 @@ install_librewolf() {
 install_dnf_packages() {
 	echo "📦 Installing CLI tools..."
 	sudo dnf install -y \
-		zsh git fzf bat neovim tmux stow golang zsh-syntax-highlighting \
+		gnome-terminal zsh git fzf bat neovim tmux stow golang zsh-syntax-highlighting \
 		zsh-autosuggestions nodejs-npm ripgrep make gcc unzip gzip xz zip \
 		wl-clipboard xclip mesa-libGLU libstdc++ bzip2-libs python3 python3-pip \
-		python3-virtualenv flatpak clang cmake ninja-build gtk3-devel java-17-openjdk \
+		python3-virtualenv python3-argcomplete flatpak clang cmake ninja-build gtk3-devel java-17-openjdk \
 		google-chrome-stable
 	echo "$SUCCESS CLI tools installation completed."
 }
@@ -111,7 +132,7 @@ download_and_extract() {
 }
 
 install_dropbox() {
-	echo "📦 Installing Dropbox (CLI Only)..."
+	echo "📦 Installing Dropbox..."
 	if command -v dropbox &>/dev/null; then
 		echo "$SUCCESS Dropbox is already installed. Skipping installation."
 		return
@@ -120,7 +141,7 @@ install_dropbox() {
 	sudo dnf install -y /tmp/nautilus-dropbox.rpm
 	rm /tmp/nautilus-dropbox.rpm
 	dropbox autostart y
-	echo "$SUCCESS Dropbox CLI installation completed. Use 'dropbox start' to launch it."
+	echo "$SUCCESS Dropbox installation completed. Use 'dropbox start' to launch it."
 }
 
 setup_dotfiles() {
@@ -181,9 +202,20 @@ install_flutter() {
 }
 
 install_android_studio() {
-	echo "🤖 Installing Android Studio..."
+	echo "🤖 Checking Android Studio installation..."
+	if [ -d "$ANDROID_STUDIO_DIR" ] && [ -x "$ANDROID_STUDIO_DIR/bin/studio.sh" ]; then
+		echo "$SUCCESS Android Studio is already installed in $ANDROID_STUDIO_DIR. Skipping installation."
+		return
+	fi
+	echo "⬇️ Downloading and installing Android Studio..."
 	sudo rm -rf "$ANDROID_STUDIO_DIR"
 	download_and_extract "$ANDROID_STUDIO_URL" "$ANDROID_STUDIO_TAR" "/opt"
+	EXTRACTED_DIR=$(find /opt -maxdepth 1 -type d -name "android-studio*" | head -n 1)
+	if [ -d "$EXTRACTED_DIR" ] && [ "$EXTRACTED_DIR" != "$ANDROID_STUDIO_DIR" ]; then
+		echo "🔄 Moving Android Studio to $ANDROID_STUDIO_DIR..."
+		sudo mv "$EXTRACTED_DIR" "$ANDROID_STUDIO_DIR"
+	fi
+	sudo ln -sf "$ANDROID_STUDIO_DIR/bin/studio.sh" /usr/local/bin/studio
 	echo "$SUCCESS Android Studio installation completed."
 }
 
@@ -204,6 +236,9 @@ setup_dotfiles
 
 # Install LibreWolf.
 install_librewolf
+
+# Install Docker Desktop.
+install_docker
 
 # Install Dropbox (CLI Only).
 install_dropbox
