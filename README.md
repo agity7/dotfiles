@@ -18,14 +18,14 @@
 Clone into `~/dotfiles`, then run:
 
 ```bash
-chmod +x fedora-install.sh && ./{DISTRO_NAME}-install.sh
+chmod +x fedora-install.sh && ./{DISTRO}-install.sh
 ```
 
 ## Scripts 📝
 
-| File                       | Purpose                                                                        |
-| -------------------------- | ------------------------------------------------------------------------------ |
-| `{DISTRO_NAME}-install.sh` | Main setup scripts. Load `vars.sh` and `functions.sh` to perform installation. |
-| `functions.sh`             | Contains all installation functions (Docker, Flutter, AMD GPU fixes, etc.).    |
-| `vars.sh`                  | Stores global variables (download URLs, repo paths, file locations).           |
-| `dnf-packages.txt`         | List of all packages to be installed via `dnf`.                                |
+| File                  | Purpose                                                                        |
+| --------------------- | ------------------------------------------------------------------------------ |
+| `{DISTRO}-install.sh` | Main setup scripts. Load `vars.sh` and `functions.sh` to perform installation. |
+| `functions.sh`        | Contains all installation functions (Docker, Flutter, AMD GPU fixes, etc.).    |
+| `vars.sh`             | Stores global variables (download URLs, repo paths, file locations).           |
+| `dnf-packages.txt`    | List of all packages to be installed via `dnf`.                                |
