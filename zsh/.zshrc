@@ -33,10 +33,6 @@ alias v="nvim"
 alias cat='bat'
 
 # Exports.
-export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/development/flutter/bin:$PATH"
-export PATH="$HOME/development/flutter/bin/cache/dart-sdk/bin:$PATH"
-export PATH=$ANDROID_STUDIO_HOME/bin:$PATH
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 export ANDROID_STUDIO_HOME=/opt/android-studio
+export PATH="$HOME/.local/bin:$HOME/bin:$HOME/development/flutter/bin:$HOME/development/flutter/bin/cache/dart-sdk/bin:$ANDROID_STUDIO_HOME/bin:$PATH"
