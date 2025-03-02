@@ -2,6 +2,7 @@
 
 ## Overview 📒
 
+- Currently only supports **Fedora**.
 - Configures development environments with essential dotfiles.
 - Includes a setup scripts for quick installation.
 
@@ -18,7 +19,7 @@
 Clone into `~/dotfiles`, then run:
 
 ```bash
-chmod +x fedora-install.sh && ./{DISTRO}-install.sh
+chmod +x {DISTRO}-install.sh && ./{DISTRO}-install.sh
 ```
 
 ## Scripts 📝
