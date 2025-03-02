@@ -23,8 +23,9 @@ chmod +x fedora-install.sh && ./fedora-install.sh
 
 ## Scripts 📝
 
-| File               | Purpose                                                                            |
-| ------------------ | ---------------------------------------------------------------------------------- |
-| **`*-install.sh`** | Main setup scripts. Loads `vars.sh` and `functions.sh` to perform installation.    |
-| **`functions.sh`** | 📌 **Contains all installation functions** (Docker, Flutter, AMD GPU fixes, etc.). |
-| **`vars.sh`**      | 📌 **Stores global variables** (download URLs, repo paths, file locations).        |
+| File                   | Purpose                                                                         |
+| ---------------------- | ------------------------------------------------------------------------------- |
+| **`*-install.sh`**     | Main setup scripts. Loads `vars.sh` and `functions.sh` to perform installation. |
+| **`functions.sh`**     | Contains all installation functions (Docker, Flutter, AMD GPU fixes, etc.).     |
+| **`vars.sh`**          | Stores global variables (download URLs, repo paths, file locations).            |
+| **`dnf-packages.txt`** | List of all packages to be installed via `dnf`.                                 |

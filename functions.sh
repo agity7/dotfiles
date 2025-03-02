@@ -34,14 +34,17 @@ install_librewolf() {
 }
 
 install_dnf_packages() {
-	echo "📦 Installing CLI tools..."
-	sudo dnf install -y \
-		gnome-tweaks gnome-terminal zsh git fzf bat neovim tmux stow golang zsh-syntax-highlighting \
-		zsh-autosuggestions nodejs-npm ripgrep make gcc unzip gzip xz zip \
-		wl-clipboard xclip mesa-libGLU libstdc++ bzip2-libs python3 python3-pip \
-		python3-virtualenv python3-argcomplete flatpak clang cmake ninja-build gtk3-devel java-17-openjdk \
-		google-chrome-stable
-	echo "$SUCCESS CLI tools installation completed."
+	echo "📦 Installing required packages from dnf-packages.txt..."
+	PACKAGE_FILE="$(dirname "$0")/dnf-packages.txt"
+	if [ ! -f "$PACKAGE_FILE" ]; then
+		echo "$FAILURE Package list file ($PACKAGE_FILE) not found!"
+		exit 1
+	fi
+	while IFS= read -r package || [ -n "$package" ]; do
+		echo "⬇️ Installing: $package"
+		sudo dnf install -y "$package"
+	done <"$PACKAGE_FILE"
+	echo "$SUCCESS All packages installed successfully."
 }
 
 check_internet() {
