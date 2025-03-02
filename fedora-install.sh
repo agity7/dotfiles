@@ -74,9 +74,7 @@ install_docker() {
 	echo "📦 Installing Docker Desktop..."
 	sudo dnf install -y "$DOCKER_DESKTOP_RPM"
 	rm -f "$DOCKER_DESKTOP_RPM"
-	echo "✅ Enabling and starting Docker Desktop..."
-	systemctl --user enable docker-desktop
-	systemctl --user start docker-desktop
+	systemctl --user disable docker-desktop
 	echo "$SUCCESS Docker Desktop installation completed."
 }
 
