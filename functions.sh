@@ -2,6 +2,84 @@
 
 source "$(dirname "$0")/vars.sh"
 
+ensure_directory_exists() {
+	local dir="$1"
+	echo "📂 Ensuring the directory $dir exists..."
+	mkdir -p "$dir" || {
+		echo "$FAILURE Failed to create directory $dir"
+		exit 1
+	}
+}
+
+install_go_swagger() {
+	echo "🦫 Installing Go-Swagger..."
+	go install "$GO_SWAGGER_URL" || {
+		echo "$FAILURE Go-Swagger installation skipped."
+		exit 1
+	}
+	echo "$SUCCESS Go-Swagger installation completed."
+}
+
+run_flutter_doctor() {
+	echo "🦋 Running Flutter doctor..."
+	flutter doctor || {
+		echo "$FAILURE Flutter doctor failed. Please check your Flutter installation."
+		exit 1
+	}
+	echo "$SUCCESS Flutter doctor completed successfully. If Android SDK tools are missing, install them from Android Studio."
+}
+
+set_zsh_default() {
+	echo "⚙️ Setting Zsh as default shell..."
+	if ! command -v zsh &>/dev/null; then
+		echo "$FAILURE Zsh is not installed. Please install Zsh first."
+		exit 1
+	fi
+	sudo chsh -s "$(which zsh)" "$USER" || {
+		echo "$FAILURE Failed to set Zsh as default shell"
+		exit 1
+	}
+	echo "$SUCCESS Zsh is now the default shell."
+	if [ "$SHELL" != "$(which zsh)" ]; then
+		echo "The current terminal session is still using $SHELL."
+		echo "You need to log out from your session and log back in for the change to take effect."
+		echo "Then, run this script again."
+		exit 1
+	fi
+	echo "$SUCCESS You are now using Zsh in this terminal session."
+}
+
+install_starship() {
+	echo "⚙️ Installing Starship..."
+	if command -v starship &>/dev/null; then
+		echo "Starship is already installed. Skipping installation."
+	else
+		echo "⚙️ Installing Starship..."
+		curl -sS https://starship.rs/install.sh | sh -s -- -y || {
+			echo "$FAILURE Starship installation failed."
+			exit 1
+		}
+		echo "$SUCCESS Starship installation completed."
+	fi
+}
+
+install_wezterm() {
+	echo "⚙️ Installing WezTerm via Flatpak..."
+	if ! command -v flatpak &>/dev/null; then
+		echo "Flatpak is not installed. Installing Flatpak..."
+		sudo dnf install -y flatpak || {
+			echo "$FAILURE Failed to install Flatpak"
+			exit 1
+		}
+	fi
+	echo "⬇️ Installing WezTerm via Flatpak from Flathub..."
+	flatpak install -y flathub org.wezfurlong.wezterm || {
+		echo "$FAILURE WezTerm installation skipped."
+		exit 1
+	}
+	echo "$SUCCESS WezTerm installation completed via Flatpak."
+}
+
 install_docker() {
 	echo "🐳 Installing Docker Desktop..."
 	if command -v docker &>/dev/null; then
@@ -60,19 +138,24 @@ download_and_extract() {
 	local url="$1"
 	local output="$2"
 	local dest="$3"
-
 	echo "⬇️ Downloading $output..."
 	wget -O "$output" "$url" || {
 		echo "$FAILURE Failed to download $output"
 		exit 1
 	}
-	echo "📦 Extracting $output..."
-	sudo tar -xzf "$output" -C "$dest" || {
-		echo "$FAILURE Failed to extract $output"
-		exit 1
+	echo "📦 Attempting to extract $output..."
+	sudo tar -xJf "$output" -C "$dest" && {
+		echo "$SUCCESS $output extracted successfully (using .xz)."
+		rm "$output"
+		return 0
 	}
-	rm "$output"
-	echo "$SUCCESS $output installation completed."
+	sudo tar -xzf "$output" -C "$dest" && {
+		echo "$SUCCESS $output extracted successfully (using .gz)."
+		rm "$output"
+		return 0
+	}
+	echo "$FAILURE Failed to extract $output"
+	exit 1
 }
 
 install_dropbox() {
@@ -139,8 +222,12 @@ install_font() {
 
 install_flutter() {
 	echo "🦋 Installing Flutter SDK..."
-	if [ ! -d "$FLUTTER_SDK_DIR" ]; then
-		download_and_extract "$FLUTTER_DOWNLOAD_URL" "$FLUTTER_TAR" "$HOME/development"
+	if command -v flutter >/dev/null 2>&1; then
+		echo "Flutter is already installed."
+	else
+		ensure_directory_exists "$DEV_DIR"
+		echo "⚙️ Flutter SDK not found, downloading and installing..."
+		download_and_extract "$FLUTTER_DOWNLOAD_URL" "$FLUTTER_TAR" "$DEV_DIR"
 	fi
 	echo "$SUCCESS Flutter installation completed."
 }
@@ -161,6 +248,8 @@ install_android_studio() {
 	fi
 	sudo ln -sf "$ANDROID_STUDIO_DIR/bin/studio.sh" /usr/local/bin/studio
 	echo "$SUCCESS Android Studio installation completed."
+	echo "🚀 Launching Android Studio..."
+	"$ANDROID_STUDIO_DIR/bin/studio.sh"
 }
 
 fix_amdgpu_on_fedora() {

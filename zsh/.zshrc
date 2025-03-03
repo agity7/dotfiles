@@ -30,9 +30,9 @@ alias g='git'
 alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
-alias cat='bat'
 
 # Exports.
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-export ANDROID_STUDIO_HOME=/opt/android-studio
-export PATH="$HOME/.local/bin:$HOME/bin:$HOME/development/flutter/bin:$HOME/development/flutter/bin/cache/dart-sdk/bin:$ANDROID_STUDIO_HOME/bin:$PATH"
+export DEV_DIR="$HOME/.dev"
+export JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
+export ANDROID_STUDIO_HOME="/opt/android-studio"
+export PATH="$HOME/.local/bin:$HOME/bin:$DEV_DIR/flutter/bin:$DEV_DIR/flutter/bin/cache/dart-sdk/bin:$ANDROID_STUDIO_HOME/bin:$HOME/.cargo/bin:$HOME/.cargo/env:$PATH"

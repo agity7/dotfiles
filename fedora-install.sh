@@ -9,15 +9,6 @@ source "$(dirname "$0")/functions.sh"
 # This script is designed to set up a development environment on Fedora 41
 # for Go backend development and Flutter frontend development.
 #
-# Additionally, it fixes issues related to Fedora 41's strict proprietary
-# software policies, which cause the system to fall back to LLVMpipe
-# (software rendering) instead of using AMDGPU for Radeon GPUs.
-#
-# This script will:
-#  - Remove "nomodeset" from GRUB to enable AMDGPU.
-#  - Install missing AMDGPU drivers, Mesa, and Vulkan.
-#  - Fix hardware acceleration for AMD Radeon GPUs.
-#
 # =====================================================
 # Post-Installation Steps
 # =====================================================
@@ -48,11 +39,11 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 echo "========== 🚀 Starting Installation: $(date) =========="
 check_internet
 sudo -v
-while sudo -v; do sleep 60; done 2>/dev/null &
+while sudo -v; do sleep 800; done 2>/dev/null &
 echo "🔄 Updating Fedora system..."
 sudo dnf update -y
 install_dnf_packages
-fix_amdgpu_on_fedora
+set_zsh_default
 setup_dotfiles
 install_librewolf
 install_docker
@@ -61,12 +52,12 @@ install_pipx_commitizen
 setup_flatpak
 install_rust
 install_font
+install_starship
+install_wezterm
+install_go_swagger
 install_flutter
 install_android_studio
-echo "🦫 Installing Go-Swagger..."
-go install "$GO_SWAGGER_URL" || echo "$FAILURE Go-Swagger installation skipped."
-echo "$SUCCESS Go-Swagger installation completed."
-echo "🦋 Running Flutter doctor..."
-flutter doctor
-echo "========== 🎉 Installation Completed: $(date) =========="
+run_flutter_doctor
+# fix_amdgpu_on_fedora NOT NECESSARY ANYMORE.
 echo "$SUCCESS Please restart your system for changes to take effect."
+echo "========== 🎉 Installation Completed: $(date) =========="
