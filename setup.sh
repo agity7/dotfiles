@@ -48,7 +48,7 @@ sudo dnf update -y
 install_dnf_packages
 set_zsh_default
 setup_dotfiles
-install_librewolf
+# install_librewolf
 install_docker
 install_dropbox
 install_pipx_commitizen

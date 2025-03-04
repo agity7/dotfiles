@@ -8,7 +8,6 @@ config = {
 	enable_tab_bar = false,
 	window_close_confirmation = "NeverPrompt",
 	window_decorations = "RESIZE",
-	default_cursor_style = "BlinkingBar",
 	color_scheme = "matrix",
 	font = wezterm.font("FiraCode Nerd Font Mono", { weight = "Regular", stretch = "Normal", style = "Normal" }),
 	font_size = 15,
