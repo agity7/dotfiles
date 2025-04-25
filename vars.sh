@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # ==================== VARIABLES ====================
+GO_VERSION="1.24.2"
+SWAGGER_VERSION="v0.30.0"
+GO_TARBALL="go${GO_VERSION}.linux-amd64.tar.gz"
 DOTFILES_DIR="$HOME/dotfiles"
 LOG_FILE="$HOME/install.log"
 DEV_DIR="$HOME/.dev"
@@ -12,7 +15,7 @@ ANDROID_STUDIO_URL="https://redirector.gvt1.com/edgedl/android/studio/ide-zips/$
 ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 FLUTTER_DOWNLOAD_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz"
 FLATPAK_REPO_URL="https://dl.flathub.org/repo/flathub.flatpakrepo"
-GO_SWAGGER_URL="github.com/go-swagger/go-swagger/cmd/swagger@latest"
+GO_SWAGGER_URL="github.com/go-swagger/go-swagger/cmd/swagger@${SWAGGER_VERSION}"
 FONT_DIR="$HOME/.local/share/fonts/FiraCode"
 RUST_INSTALL_URL="https://sh.rustup.rs"
 DROPBOX_URL="https://www.dropbox.com/download?dl=packages/fedora/nautilus-dropbox-2024.04.17-1.fc39.x86_64.rpm"

@@ -57,6 +57,7 @@ install_rust
 install_font
 install_starship
 install_wezterm
+install_go
 install_go_swagger
 install_flutter
 install_android_studio

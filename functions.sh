@@ -11,9 +11,27 @@ ensure_directory_exists() {
 	}
 }
 
+install_go() {
+	echo "🦫 Installing Go $GO_VERSION to $DEV_DIR/go..."
+	# if [ -d "$DEV_DIR/go-$GO_VERSION" ]; then
+	# 	echo "$SUCCESS Go $GO_VERSION already installed. Skipping."
+	# 	return
+	# fi
+	curl -LO "https://go.dev/dl/$GO_TARBALL"
+	rm -rf "$DEV_DIR/go" "$DEV_DIR/go-$GO_VERSION"
+	tar -C "$DEV_DIR" -xzf "$GO_TARBALL"
+	mv "$DEV_DIR/go" "$DEV_DIR/go-$GO_VERSION"
+	ln -sfn "$DEV_DIR/go-$GO_VERSION" "$DEV_DIR/go"
+	rm "$GO_TARBALL"
+	"$DEV_DIR/go/bin/go" env -w GOTOOLCHAIN=auto
+	"$DEV_DIR/go/bin/go" env -w GOPROXY=direct
+	export PATH="$DEV_DIR/go/bin:$PATH"
+	echo "$SUCCESS Go $GO_VERSION installed with auto toolchain enabled and proxy set to direct at $DEV_DIR/go"
+}
+
 install_go_swagger() {
-	echo "🦫 Installing Go-Swagger..."
-	go install "$GO_SWAGGER_URL" || {
+	echo "🦫 Installing Go-Swagger (with GOSUMDB=off)..."
+	GOSUMDB=off go install "$GO_SWAGGER_URL" || {
 		echo "$FAILURE Go-Swagger installation skipped."
 		exit 1
 	}

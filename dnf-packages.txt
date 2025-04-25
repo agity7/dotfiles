@@ -1,3 +1,4 @@
+sd
 keepassxc
 gnome-tweaks
 gnome-terminal
@@ -8,7 +9,6 @@ bat
 neovim
 tmux
 stow
-golang
 zsh-syntax-highlighting
 zsh-autosuggestions
 nodejs-npm
