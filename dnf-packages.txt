@@ -1,4 +1,7 @@
 sd
+luarocks
+fd-find
+tzdata
 keepassxc
 gnome-tweaks
 gnome-terminal
