@@ -8,17 +8,6 @@ return {
 		require("codeium").setup({
 			enable_chat = true,
 			enable_in_insert = true,
-			filetypes = {
-				lua = true,
-				go = true,
-				html = true,
-				javascript = true,
-				typescript = true,
-				python = true,
-				rust = true,
-				markdown = true,
-				["*"] = false,
-			},
 			virtual_text = {
 				enabled = true,
 				map_keys = true,
