@@ -125,7 +125,7 @@ return { -- Autocompletion
 			}),
 			-- Adjust the order and priority of sources here
 			sources = cmp.config.sources({
-				{ name = "codeium", priority = 1000 }, -- Highest priority for Codeium
+				{ name = "codeium", priority = 1000 },
 				{ name = "nvim_lsp", priority = 900 },
 				{ name = "luasnip", priority = 800 },
 				{ name = "buffer", priority = 700 },
@@ -136,7 +136,6 @@ return { -- Autocompletion
 				format = function(entry, vim_item)
 					-- Kind icons
 					vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-					-- Apply bright green color to the Codeium icon
 					if entry.source.name == "codeium" then
 						vim_item.kind_hl_group = "CodeiumIcon"
 					end

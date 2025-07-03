@@ -18,7 +18,7 @@ return {
 	require("plugins.gitsigns"),
 	require("plugins.indent-blankline"),
 	require("plugins.misc"),
-	require("plugins.codeium"),
+	require("plugins.windsurf"),
 	require("plugins.noice"),
 	require("plugins.smearcursor"),
 	require("plugins.incline"),
