@@ -3,13 +3,13 @@ return {
 	"neovim/nvim-lspconfig",
 	dependencies = {
 		-- Automatically install LSPs and related tools to stdpath for Neovim
-		{ "williamboman/mason.nvim",                   version = "1.11.0", config = true }, -- NOTE: Must be loaded before dependants
-		{ "williamboman/mason-lspconfig.nvim",         version = "1.24.0" },
+		{ "williamboman/mason.nvim", version = "1.11.0", config = true }, -- NOTE: Must be loaded before dependants
+		{ "williamboman/mason-lspconfig.nvim", version = "1.24.0" },
 		{ "WhoIsSethDaniel/mason-tool-installer.nvim", version = "1.7.0" },
 
 		-- Useful status updates for LSP.
 		-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-		{ "j-hui/fidget.nvim",                         opts = {} },
+		{ "j-hui/fidget.nvim", opts = {} },
 
 		-- Allows extra capabilities provided by nvim-cmp
 		"hrsh7th/cmp-nvim-lsp",
@@ -178,8 +178,11 @@ return {
 					gopls = {
 						staticcheck = true, -- Enable static analysis checks
 						analyses = {
-							unusedparams = true, -- Highlight unused parameters
-							shadow = true, -- Highlight variable shadowing
+							unusedparams = true,
+							unusedvariable = true,
+							unusedwrite = true,
+							unused = true,
+							shadow = true,
 						},
 						gofumpt = true, -- Use 'gofumpt' for formatting
 					},

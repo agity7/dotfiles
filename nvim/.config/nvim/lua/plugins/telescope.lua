@@ -127,8 +127,7 @@ return {
 		vim.keymap.set("n", ";r", function()
 			builtin.live_grep({ additional_args = { "--hidden" } })
 		end, {
-			desc =
-			"Search for a string in your current working directory and get results live as you type, respects .gitignore",
+			desc = "Search for a string in your current working directory and get results live as you type, respects .gitignore",
 		})
 		vim.keymap.set("n", ";t", builtin.help_tags, { desc = "Lists available help tags" })
 		vim.keymap.set("n", ";;", builtin.resume, { desc = "Resume the previous telescope picker" })
