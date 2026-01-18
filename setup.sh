@@ -58,10 +58,10 @@ install_font
 install_starship
 install_wezterm
 install_go
-install_go_swagger
-install_flutter
-install_android_studio
-run_flutter_doctor
+# install_go_swagger
+# install_flutter
+# install_android_studio
+# run_flutter_doctor
 # fix_amdgpu_on_fedora
 
 echo "$SUCCESS Please restart your system for changes to take effect."
