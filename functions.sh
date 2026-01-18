@@ -15,6 +15,19 @@ ensure_directory_exists() {
 	}
 }
 
+cleanup_dotfile_conflicts() {
+	local f
+	for f in .zshrc .zprofile .zlogin .zlogout; do
+		if [ -e "$HOME/$f" ] && [ ! -L "$HOME/$f" ]; then
+			echo "🧹 Removing unmanaged $f"
+			rm -f "$HOME/$f" || {
+				echo "$FAILURE Failed to remove $f"
+				exit 1
+			}
+		fi
+	done
+}
+
 install_go() {
 	echo "🦫 Installing Go $GO_VERSION to $DEV_DIR/go..."
 	ensure_directory_exists "$DEV_DIR"
@@ -205,6 +218,7 @@ setup_dotfiles() {
 		echo "$FAILURE Dotfiles dir not found: $DOTFILES_DIR"
 		exit 1
 	}
+	cleanup_dotfile_conflicts
 	if command -v stow &>/dev/null; then
 		for dir in zsh nvim tmux starship wezterm; do
 			[ -d "$DOTFILES_DIR/$dir" ] && stow -d "$DOTFILES_DIR" -t "$HOME" "$dir"
