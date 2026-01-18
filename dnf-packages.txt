@@ -35,5 +35,5 @@ clang
 cmake
 ninja-build
 gtk3-devel
-java-17-openjdk
+java-25-openjdk
 google-chrome-stable
