@@ -36,4 +36,4 @@ cmake
 ninja-build
 gtk3-devel
 java-25-openjdk
-google-chrome-stable
+chromium
