@@ -54,6 +54,7 @@ install_docker
 install_pipx_commitizen
 setup_flatpak
 install_rust
+install_sd
 install_font
 install_starship
 install_wezterm

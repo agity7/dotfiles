@@ -1,4 +1,3 @@
-sd
 luarocks
 fd-find
 tzdata

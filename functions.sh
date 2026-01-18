@@ -210,6 +210,19 @@ install_rust() {
 	echo "$SUCCESS Rust installation completed."
 }
 
+install_sd() {
+	echo "🔧 Installing sd (Rust-based sed replacement)..."
+	if command -v sd &>/dev/null; then
+		echo "$SUCCESS sd already installed."
+		return
+	fi
+	cargo install sd || {
+		echo "$FAILURE Failed to install sd"
+		exit 1
+	}
+	echo "$SUCCESS sd installed."
+}
+
 install_pipx_commitizen() {
 	echo "🐍 Installing pipx & Commitizen..."
 	if ! command -v pipx &>/dev/null; then
