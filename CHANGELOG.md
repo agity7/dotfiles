@@ -1,0 +1,89 @@
+## 0.0.2 (2026-01-18)
+
+### Fix
+
+- disable flutter installation for new pc
+- fix fedora 43 issue with zshrc
+- fix issue with codeium and update lazy
+- edit dotfiles
+- remove Codeium and change for Windsurf
+- enhance codeium behavior
+- edit codeium plugin func to bypass code completion in non utf 8 files
+- oiubewew
+- njfewfewfewewfew
+- make codeium work in specific file types
+- remove deprecated vim commands
+- add explicit version to all mason related packages
+- revert mason to 1.11.0 to fix serious issue with 2.0.0
+- fix many issue detected when running `checkhealth` nvim command
+- remove Go installation from DNF and use a custom script using official tar
+- enhance dotfiles
+- enhacne script
+- enhance script
+- enhance readme
+- enhance readme
+- enhance readem
+- enhance readme
+- add file to centralize dnf packages
+- enhance script and readme
+- prevent docker from starting at login
+- script
+- finalize script
+- fix script
+- enhance script
+- finalize script
+- fix font
+- wfewf
+- fix zshrc
+- fix zshrc not removed if present
+- fix scrpt
+- fix script and zshrc
+- fix script
+- fix script
+- fix script
+- fix script
+- fix script
+- add comment in script
+- fix linux url
+- enhance script
+- enhance script
+- fix script
+- enhance script
+- fix script
+- enhance script
+- fix script to solve issues shown in install.log
+- enhance script
+- enhance docs
+- add fedora install script
+- wefewfewfewfew
+- wfwfeew
+- fwefewfew
+- fwefewfewfew
+- lsp
+- use rust based sd for spectre
+- prevent sed from creating a copy with -E suffix
+- add spectre
+- remove noice from showing notifications on save
+- use golangci lint for stricter rules
+- solve issue regarding tab key in insert mode causing error
+- remove some tmux plugins
+- allow hidden files to be shown in file navigator in telescope
+- add back golangci lint
+- removed golangci lint to avoid conflicts with gofmt
+- edit bufferline.lua
+- make nvim colors look the same inside and outside Tmux lol
+- remove buggy goline tools
+- simplify autoformatting file
+- add missing go tools in autoformatting.lya
+- add nvim web devicon explicitely
+- add shortcut to popup autocompletion box in insert and normal mode
+- add codium details in lualine and autosuggestions
+- enhance dashboard
+- fwefewfew
+- fix highlighting
+- change incline color for orange
+- edit config
+- change go version and install node for mason to run properly
+- edit wezterm
+- fix tab sorting and navigation between vim and tmux
+- first commit
