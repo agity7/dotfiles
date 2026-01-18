@@ -50,7 +50,7 @@ set_zsh_default
 setup_dotfiles
 # install_librewolf
 install_docker
-install_dropbox
+# install_dropbox
 install_pipx_commitizen
 setup_flatpak
 install_rust
