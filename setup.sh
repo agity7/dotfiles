@@ -39,6 +39,7 @@ set -e
 exec > >(tee -a "$LOG_FILE") 2>&1
 echo "========== 🚀 Starting Installation: $(date) =========="
 check_internet
+ensure_directory_exists "$DEV_DIR"
 sudo -v
 while sudo -v; do sleep 800; done 2>/dev/null &
 echo "🔄 Updating Fedora system..."

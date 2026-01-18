@@ -4,6 +4,10 @@ source "$(dirname "$0")/vars.sh"
 
 ensure_directory_exists() {
 	local dir="$1"
+	[ -n "$dir" ] || {
+		echo "$FAILURE Missing directory path"
+		exit 1
+	}
 	echo "📂 Ensuring the directory $dir exists..."
 	mkdir -p "$dir" || {
 		echo "$FAILURE Failed to create directory $dir"
@@ -13,13 +17,13 @@ ensure_directory_exists() {
 
 install_go() {
 	echo "🦫 Installing Go $GO_VERSION to $DEV_DIR/go..."
-	# if [ -d "$DEV_DIR/go-$GO_VERSION" ]; then
-	# 	echo "$SUCCESS Go $GO_VERSION already installed. Skipping."
-	# 	return
-	# fi
+	ensure_directory_exists "$DEV_DIR"
 	curl -LO "https://go.dev/dl/$GO_TARBALL"
 	rm -rf "$DEV_DIR/go" "$DEV_DIR/go-$GO_VERSION"
-	tar -C "$DEV_DIR" -xzf "$GO_TARBALL"
+	tar -C "$DEV_DIR" -xzf "$GO_TARBALL" || {
+		echo "$FAILURE Failed to extract $GO_TARBALL"
+		exit 1
+	}
 	mv "$DEV_DIR/go" "$DEV_DIR/go-$GO_VERSION"
 	ln -sfn "$DEV_DIR/go-$GO_VERSION" "$DEV_DIR/go"
 	rm "$GO_TARBALL"
@@ -109,6 +113,7 @@ install_docker() {
 	sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
 	echo "$SUCCESS Docker repository added."
 	echo "⬇️ Downloading Docker Desktop..."
+	ensure_directory_exists "$(dirname "$DOCKER_DESKTOP_RPM")"
 	wget -O "$DOCKER_DESKTOP_RPM" "$DOCKER_DESKTOP_RPM_URL"
 	echo "📦 Installing Docker Desktop..."
 	sudo dnf install -y "$DOCKER_DESKTOP_RPM"
@@ -156,6 +161,11 @@ download_and_extract() {
 	local url="$1"
 	local output="$2"
 	local dest="$3"
+	[ -n "$dest" ] || {
+		echo "$FAILURE Missing destination directory"
+		exit 1
+	}
+	ensure_directory_exists "$dest"
 	echo "⬇️ Downloading $output..."
 	wget -O "$output" "$url" || {
 		echo "$FAILURE Failed to download $output"
@@ -191,6 +201,10 @@ install_dropbox() {
 
 setup_dotfiles() {
 	echo "🔧 Setting up dotfiles..."
+	[ -d "$DOTFILES_DIR" ] || {
+		echo "$FAILURE Dotfiles dir not found: $DOTFILES_DIR"
+		exit 1
+	}
 	if command -v stow &>/dev/null; then
 		for dir in zsh nvim tmux starship wezterm; do
 			[ -d "$DOTFILES_DIR/$dir" ] && stow -d "$DOTFILES_DIR" -t "$HOME" "$dir"
@@ -243,11 +257,16 @@ setup_flatpak() {
 
 install_font() {
 	echo "🔠 Installing Fira Code Nerd Font Mono..."
-	mkdir -p "$FONT_DIR"
-	cd "$FONT_DIR"
-	wget -O FiraCode.zip "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
-	unzip -o FiraCode.zip && rm FiraCode.zip
-	fc-cache -fv
+	ensure_directory_exists "$FONT_DIR"
+	(
+		cd "$FONT_DIR" || {
+			echo "$FAILURE Failed to cd to $FONT_DIR"
+			exit 1
+		}
+		wget -O FiraCode.zip "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
+		unzip -o FiraCode.zip && rm FiraCode.zip
+		fc-cache -fv
+	)
 	echo "$SUCCESS Font installation completed."
 }
 
