@@ -42,8 +42,7 @@ check_internet
 ensure_directory_exists "$DEV_DIR"
 sudo -v
 while sudo -v; do sleep 800; done 2>/dev/null &
-echo "🔄 Updating Fedora system..."
-sudo dnf update -y
+dnf_update_system
 
 # ==================== EXECUTION ====================
 install_dnf_packages
@@ -51,7 +50,7 @@ set_zsh_default
 setup_dotfiles
 # install_librewolf
 install_docker
-# install_dropbox
+install_dropbox
 install_pipx_commitizen
 setup_flatpak
 install_rust

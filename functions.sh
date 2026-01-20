@@ -2,6 +2,23 @@
 
 source "$(dirname "$0")/vars.sh"
 
+dnf_update_system() {
+	echo "🔄 Updating Fedora system..."
+	local args=()
+	local ex
+	echo "Excluding: ${DNF_UPDATE_EXCLUDES[*]}"
+	if [ "${#DNF_UPDATE_EXCLUDES[@]}" -gt 0 ]; then
+		for ex in "${DNF_UPDATE_EXCLUDES[@]}"; do
+			[ -n "$ex" ] && args+=("--exclude=$ex")
+		done
+	fi
+	sudo dnf update -y "${args[@]}" || {
+		echo "$FAILURE Fedora update failed."
+		exit 1
+	}
+	echo "$SUCCESS Fedora update completed."
+}
+
 ensure_directory_exists() {
 	local dir="$1"
 	[ -n "$dir" ] || {

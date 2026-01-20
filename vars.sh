@@ -23,6 +23,9 @@ LIBREWOLF_REPO_URL="https://repo.librewolf.net/librewolf.repo"
 LIBREWOLF_REPO_PATH="/etc/yum.repos.d/librewolf.repo"
 DOCKER_DESKTOP_RPM_URL="https://desktop.docker.com/linux/main/amd64/docker-desktop-x86_64.rpm"
 DOCKER_DESKTOP_RPM="/tmp/docker-desktop-x86_64.rpm"
+DNF_UPDATE_EXCLUDES=(
+	"nautilus-dropbox"
+)
 SUCCESS="[SUCCESS]"
 FAILURE="[FAILURE]"
 
