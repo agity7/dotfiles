@@ -63,7 +63,7 @@ install_go
 # install_flutter
 # install_android_studio
 # run_flutter_doctor
-# fix_amdgpu_on_fedora
+fix_amdgpu_on_fedora
 
 echo "$SUCCESS Please restart your system for changes to take effect."
 echo "========== 🎉 Installation Completed: $(date) =========="
