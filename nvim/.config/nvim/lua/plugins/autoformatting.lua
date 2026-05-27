@@ -9,7 +9,6 @@ return {
 		local fmt = ls.builtins.formatting
 		local diag = ls.builtins.diagnostics
 		local tools = {
-			"checkmake",
 			"prettier",
 			"stylua",
 			"shfmt",
@@ -17,7 +16,6 @@ return {
 			"goimports",
 		}
 		local src = {
-			diag.checkmake,
 			fmt.prettier.with({ filetypes = { "html", "json", "yaml", "markdown" } }),
 			fmt.stylua.with({ filetypes = { "lua", "luau" } }),
 			fmt.shfmt.with({ filetypes = { "sh" } }),
