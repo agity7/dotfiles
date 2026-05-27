@@ -1,4 +1,4 @@
-model: openai/gpt-4o
+model: xai/grok-4.3
 auto-commits: false
 gitignore: false
 auto-lint: true

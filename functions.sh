@@ -44,13 +44,11 @@ cleanup_dotfile_conflicts() {
 		fi
 	done
 }
-
 setup_env_file() {
 	info "Setting up env file"
 	if [ ! -f "$ENV_FILE" ]; then
 		cat >"$ENV_FILE" <<'EOF'
-AIDER_OPENAI_API_KEY=""
-OPENAI_API_KEY=""
+XAI_API_KEY=""
 EOF
 		chmod 600 "$ENV_FILE"
 		ok "Env file created at $ENV_FILE"

@@ -22,22 +22,24 @@ Clone the repository into `~/dotfiles`, then run:
 chmod +x setup.sh && ./setup.sh
 ```
 
-## Aider
+## Environment
 
-Aider reads its API keys from:
+The setup creates a global environment file at:
 
 ```text
-~/.aider.env
+~/.env
 ```
 
-The file must define:
+This file stores private API keys and local secrets used by development tools.
+It is private and must not be committed.
 
-```bash
-AIDER_OPENAI_API_KEY=""
-OPENAI_API_KEY=""
+## Aider
+
+Aider reads its configuration from the dotfiles-managed config file and loads API keys from:
+
+```text
+~/.env
 ```
-
-This file is private and must not be committed.
 
 The setup syncs Fabriktor conventions to:
 
@@ -45,7 +47,7 @@ The setup syncs Fabriktor conventions to:
 ~/.aider/CONVENTIONS.md
 ```
 
-The Aider config is managed through dotfiles and reads this conventions file automatically.
+The Aider config reads this conventions file automatically.
 
 ## Scripts
 
