@@ -1,7 +1,6 @@
 local M = {}
-
 function M.activate()
-    vim.cmd[[colorscheme solarized-osaka]]
+	vim.cmd([[colorscheme solarized-osaka]])
 end
 
 return M

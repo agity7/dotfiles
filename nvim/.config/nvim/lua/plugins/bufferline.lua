@@ -7,18 +7,18 @@ return {
 	config = function()
 		require("bufferline").setup({
 			options = {
-				mode = "tabs", -- set to "tabs" to only show tabpages instead
-				themable = true, -- allows highlight groups to be overriden i.e. sets highlights as default
-				numbers = "none", -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
-				close_command = "Bdelete! %d", -- can be a string | function, see "Mouse actions"
+				mode = "tabs",
+				themable = true,
+				numbers = "none",
+				close_command = "Bdelete! %d",
 				buffer_close_icon = "✗",
 				close_icon = "✗",
-				path_components = 1, -- Show only the file name without the directory
-				modified_icon = "🍒",
+				path_components = 1,
+				modified_icon = "●",
 				left_trunc_marker = "",
 				right_trunc_marker = "",
 				max_name_length = 30,
-				max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
+				max_prefix_length = 30,
 				tab_size = 21,
 				diagnostics = false,
 				diagnostics_update_in_insert = false,
@@ -26,23 +26,18 @@ return {
 				show_buffer_icons = true,
 				show_buffer_close_icons = true,
 				show_close_icon = true,
-				persist_buffer_sort = false, -- whether or not custom sorted buffers should persist
-				separator_style = { "│", "│" }, -- | "thick" | "thin" | { 'any', 'any' },
+				persist_buffer_sort = false,
+				separator_style = { "│", "│" },
 				enforce_regular_tabs = true,
 				always_show_bufferline = true,
 				show_tab_indicators = false,
 				indicator = {
-					-- icon = '▎', -- this should be omitted if indicator style is not 'icon'
-					style = "none", -- Options: 'icon', 'underline', 'none'
+					style = "none",
 				},
 				icon_pinned = "󰐃",
 				minimum_padding = 1,
 				maximum_padding = 5,
 				maximum_length = 15,
-				sort_by = nil,
-				-- sort_by = function(buffer_a, buffer_b)
-				--   return buffer_a.name < buffer_b.name
-				-- end,
 			},
 			highlights = {
 				separator = {
@@ -52,11 +47,6 @@ return {
 					bold = true,
 					italic = false,
 				},
-				-- separator_selected = {},
-				-- tab_selected = {},
-				-- background = {},
-				-- indicator_selected = {},
-				-- fill = {},
 			},
 		})
 	end,

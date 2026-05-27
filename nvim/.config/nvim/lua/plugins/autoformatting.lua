@@ -2,58 +2,47 @@ return {
 	"nvimtools/none-ls.nvim",
 	dependencies = {
 		"nvimtools/none-ls-extras.nvim",
-		"jayp0521/mason-null-ls.nvim", -- ensure dependencies are installed
+		"jayp0521/mason-null-ls.nvim",
 	},
 	config = function()
-		local null_ls = require("null-ls")
-		local formatting = null_ls.builtins.formatting -- to setup formatters
-		local diagnostics = null_ls.builtins.diagnostics -- to setup linters
-
-		-- list of formatters & linters for mason to install
+		local ls = require("null-ls")
+		local fmt = ls.builtins.formatting
+		local diag = ls.builtins.diagnostics
+		local tools = {
+			"checkmake",
+			"prettier",
+			"stylua",
+			"shfmt",
+			"golangci-lint",
+			"goimports",
+		}
+		local src = {
+			diag.checkmake,
+			fmt.prettier.with({ filetypes = { "html", "json", "yaml", "markdown" } }),
+			fmt.stylua.with({ filetypes = { "lua", "luau" } }),
+			fmt.shfmt.with({ filetypes = { "sh" } }),
+			diag.golangci_lint.with({ filetypes = { "go" } }),
+			fmt.goimports.with({ filetypes = { "go" } }),
+		}
 		require("mason-null-ls").setup({
-			ensure_installed = {
-				"checkmake",
-				"prettier", -- ts/js formatter
-				"stylua", -- lua formatter
-				"shfmt",
-				"golangci-lint",
-				"goimports-reviser",
-				"staticcheck",
-				"gofmt",
-				"goimports",
-			},
-			-- auto-install configured formatters & linters (with null-ls)
+			ensure_installed = tools,
 			automatic_installation = true,
 		})
-
-		local sources = {
-			diagnostics.checkmake,
-			formatting.prettier.with({ filetypes = { "html", "json", "yaml", "markdown" } }),
-			formatting.stylua.with({ filetypes = { "lua", "luau" } }),
-			formatting.shfmt.with({ filetypes = { "sh" } }),
-			diagnostics.golangci_lint.with({ filetypes = { "go" } }),
-			formatting.goimports_reviser.with({ filetypes = { "go" } }),
-			diagnostics.staticcheck.with({ filetypes = { "go" } }),
-			formatting.gofmt.with({ filetypes = { "go" } }),
-			formatting.goimports.with({ filetypes = { "go" } }),
-		}
-
-		local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-		null_ls.setup({
-			-- debug = true, -- Enable debug mode. Inspect logs with :NullLsLog.
-			sources = sources,
-			-- you can reuse a shared lspconfig on_attach callback here
-			on_attach = function(client, bufnr)
-				if client.supports_method("textDocument/formatting") then
-					vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-					vim.api.nvim_create_autocmd("BufWritePre", {
-						group = augroup,
-						buffer = bufnr,
-						callback = function()
-							vim.lsp.buf.format({ async = false })
-						end,
-					})
+		ls.setup({
+			sources = src,
+			on_attach = function(cl, buf)
+				if not cl.supports_method("textDocument/formatting") then
+					return
 				end
+				local grp = vim.api.nvim_create_augroup("LspFormatting", { clear = false })
+				vim.api.nvim_clear_autocmds({ group = grp, buffer = buf })
+				vim.api.nvim_create_autocmd("BufWritePre", {
+					group = grp,
+					buffer = buf,
+					callback = function()
+						vim.lsp.buf.format({ async = false, bufnr = buf })
+					end,
+				})
 			end,
 		})
 	end,

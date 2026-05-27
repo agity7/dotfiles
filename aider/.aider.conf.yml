@@ -1,0 +1,6 @@
+env-file: ~/.aider.env
+auto-commits: false
+gitignore: false
+auto-lint: true
+read:
+  - ~/.aider/CONVENTIONS.md

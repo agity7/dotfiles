@@ -1,35 +1,45 @@
 return {
 	"b0o/incline.nvim",
-	dependencies = { "craftzdog/solarized-osaka.nvim" },
+	dependencies = {
+		"nvim-tree/nvim-web-devicons",
+	},
 	event = "BufReadPre",
 	priority = 1200,
 	config = function()
-		local colors = require("solarized-osaka.colors").setup()
+		local col = require("solarized-osaka.colors").setup()
 		require("incline").setup({
 			highlight = {
 				groups = {
 					InclineNormal = {
-						guibg = colors.magenta300,
-						guifg = colors.base04,
+						guibg = col.magenta300,
+						guifg = col.base04,
 					},
 					InclineNormalNC = {
-						guifg = colors.violet500,
-						guibg = colors.base03,
+						guibg = col.base03,
+						guifg = col.violet500,
 					},
 				},
 			},
-			window = { margin = { vertical = 0, horizontal = 1 } },
+			window = {
+				margin = {
+					vertical = 0,
+					horizontal = 1,
+				},
+			},
 			hide = {
 				cursorline = true,
 			},
-			render = function(props)
-				local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
-				if vim.bo[props.buf].modified then
-					filename = "[+]" .. filename
+			render = function(ctx)
+				local name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(ctx.buf), ":t")
+				if vim.bo[ctx.buf].modified then
+					name = "[+]" .. name
 				end
-
-				local icon, color = require("nvim-web-devicons").get_icon_color(filename)
-				return { { icon, guifg = color }, { " " }, { filename } }
+				local icon, color = require("nvim-web-devicons").get_icon_color(name)
+				return {
+					{ icon, guifg = color },
+					{ " " },
+					{ name },
+				}
 			end,
 		})
 	end,

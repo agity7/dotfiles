@@ -1,37 +1,22 @@
-# Starship prompt.
 eval "$(starship init zsh)"
-
-# Unset SSH_ASKPASS to avoid issues with ksshaskpass.
 unset SSH_ASKPASS
-
-# Enable syntax highlighting & autosuggestions.
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# Customize syntax highlighting styles to disable underlining globally.
+[[ -r /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[[ -r /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 (( ${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
-for style in ${(k)ZSH_HIGHLIGHT_STYLES}; do
-  ZSH_HIGHLIGHT_STYLES[$style]='nounderline'
+for k in ${(k)ZSH_HIGHLIGHT_STYLES}; do
+	ZSH_HIGHLIGHT_STYLES[$k]="nounderline"
 done
-
-# Additional custom styles.
-ZSH_HIGHLIGHT_STYLES[default]='none'
-ZSH_HIGHLIGHT_STYLES[command]='fg=#00bfff'  # Bright blue for commands.
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=#00bfff'  # Bright blue for built-ins.
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#ffff00'    # Bright yellow for aliases.
-
-# Customize auto-suggestions.
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#aaaaaa,nounderline'  # Grey for suggestions.
-
-# Aliases.
-alias ls='ls -al'
-alias ll='ls -al'
-alias g='git'
+ZSH_HIGHLIGHT_STYLES[default]="none"
+ZSH_HIGHLIGHT_STYLES[command]="fg=#00bfff"
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=#00bfff"
+ZSH_HIGHLIGHT_STYLES[alias]="fg=#ffff00"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#aaaaaa,nounderline"
+alias ls="ls -al"
+alias ll="ls -al"
+alias g="git"
 alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
-
-# Exports.
 export DEV_DIR="$HOME/.dev"
 export JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
 export ANDROID_STUDIO_HOME="/opt/android-studio"

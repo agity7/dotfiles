@@ -1,39 +1,64 @@
-# Philippe Bazinet's Dot Files 🔨
+# Philippe Bazinet's Dotfiles
 
-## Overview 📒
+## Overview
 
-- Currently only supports **Fedora**.
-- Configures development environments with essential dotfiles.
-- Includes a setup scripts for quick installation.
+Fedora-focused dotfiles and setup scripts for a reproducible development environment.
 
-## Tools & Packages 🔧
+## Stack
 
-- **Core:** WezTerm, Neovim, Starship, tmux, zsh, Stow, and more...
-- **Languages:** Go, Dart, and more...
-- **Utilities:** git, curl, commitizen, gnu-sed, go-swagger, and more...
-- **GUI Apps:** WezTerm, Flutter, Docker, Android Studio, and more...
-- **Fonts:** Fira Code Nerd Font
+| Category  | Tools                                             |
+| --------- | ------------------------------------------------- |
+| Core      | WezTerm, Neovim, Starship, tmux, zsh, Stow, Aider |
+| Languages | Go                                                |
+| Utilities | Git, curl, Commitizen, GNU sed, go-swagger        |
+| GUI       | Flutter, Docker, Android Studio                   |
+| Fonts     | Fira Code Nerd Font                               |
 
-## Installation 📜
+## Installation
 
-Clone into `~/dotfiles`, then run:
+Clone the repository into `~/dotfiles`, then run:
 
 ```bash
 chmod +x setup.sh && ./setup.sh
 ```
 
-## Scripts 📝
+## Aider
 
-| File               | Purpose                                                                        |
-| ------------------ | ------------------------------------------------------------------------------ |
-| `setup.sh`         | Main setup scripts. Load `vars.sh` and `functions.sh` to perform installation. |
-| `functions.sh`     | Contains all installation functions (Docker, Flutter, AMD GPU fixes, etc.).    |
-| `vars.sh`          | Stores global variables (download URLs, repo paths, file locations).           |
-| `dnf-packages.txt` | List of all packages to be installed via `dnf`.                                |
+Aider reads its API keys from:
 
-## 🛠️ Checking If AMDGPU is Properly Enabled
+```text
+~/.aider.env
+```
 
-Run the following command:
+The file must define:
+
+```bash
+AIDER_OPENAI_API_KEY=""
+OPENAI_API_KEY=""
+```
+
+This file is private and must not be committed.
+
+The setup syncs Fabriktor conventions to:
+
+```text
+~/.aider/CONVENTIONS.md
+```
+
+The Aider config is managed through dotfiles and reads this conventions file automatically.
+
+## Scripts
+
+| File               | Purpose                                      |
+| ------------------ | -------------------------------------------- |
+| `setup.sh`         | Main installation entrypoint.                |
+| `functions.sh`     | Installation functions.                      |
+| `vars.sh`          | Shared variables, paths, versions, and URLs. |
+| `dnf-packages.txt` | Fedora packages installed through `dnf`.     |
+
+## AMDGPU Verification
+
+Run:
 
 ```sh
 glxinfo | grep "OpenGL renderer string"

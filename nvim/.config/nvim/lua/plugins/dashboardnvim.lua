@@ -1,6 +1,20 @@
+local function btn(icon, desc, key, action)
+	return {
+		icon = icon,
+		icon_hl = "DashboardIcon",
+		desc = desc,
+		desc_hl = "DashboardDesc",
+		key = key,
+		key_hl = "DashboardKey",
+		action = action,
+	}
+end
 return {
 	"nvimdev/dashboard-nvim",
 	event = "VimEnter",
+	dependencies = {
+		"nvim-tree/nvim-web-devicons",
+	},
 	config = function()
 		require("dashboard").setup({
 			theme = "doom",
@@ -19,77 +33,20 @@ return {
 					[[                             ]],
 				},
 				center = {
-					{
-						icon = " ",
-						icon_hl = "DashboardIcon",
-						desc = "Command",
-						desc_hl = "DashboardDesc",
-						key = "c",
-						key_hl = "DashboardKey",
-						action = function()
-							vim.api.nvim_feedkeys(":", "n", false)
-						end,
-					},
-					{
-						icon = "󰱼 ",
-						icon_hl = "DashboardIcon",
-						desc = "Find File",
-						desc_hl = "DashboardDesc",
-						key = "f",
-						key_hl = "DashboardKey",
-						action = "Telescope find_files",
-					},
-					{
-						icon = " ",
-						icon_hl = "DashboardIcon",
-						desc = "Navigate",
-						desc_hl = "DashboardDesc",
-						key = "d",
-						key_hl = "DashboardKey",
-						action = function()
-							vim.api.nvim_command("normal ;d")
-						end,
-					},
-					{
-						icon = " ",
-						icon_hl = "DashboardIcon",
-						desc = "Find Word",
-						desc_hl = "DashboardDesc",
-						key = "r",
-						key_hl = "DashboardKey",
-						action = "Telescope live_grep",
-					},
-					{
-						icon = "󰶆 ",
-						icon_hl = "DashboardIcon",
-						desc = "Lazy",
-						desc_hl = "DashboardDesc",
-						key = "l",
-						key_hl = "DashboardKey",
-						action = "Lazy",
-					},
-					{
-						icon = "󰰐 ",
-						icon_hl = "DashboardIcon",
-						desc = "Mason",
-						desc_hl = "DashboardDesc",
-						key = "m",
-						key_hl = "DashboardKey",
-						action = "Mason",
-					},
-					{
-						icon = "󰩈 ",
-						icon_hl = "DashboardIcon",
-						desc = "Quit",
-						desc_hl = "DashboardDesc",
-						key = "q",
-						key_hl = "DashboardKey",
-						action = "qa",
-					},
+					btn(" ", "Command", "c", function()
+						vim.api.nvim_feedkeys(":", "n", false)
+					end),
+					btn("󰱼 ", "Find File", "f", "Telescope find_files"),
+					btn(" ", "Files", "d", "Neotree toggle position=left"),
+					btn(" ", "Find Word", "r", "Telescope live_grep"),
+					btn("󰶆 ", "Lazy", "l", "Lazy"),
+					btn("󰰐 ", "Mason", "m", "Mason"),
+					btn("󰩈 ", "Quit", "q", "qa"),
 				},
-				footer = { "Never give up!" },
+				footer = {
+					"Never give up!",
+				},
 			},
 		})
 	end,
-	dependencies = { "nvim-tree/nvim-web-devicons" },
 }

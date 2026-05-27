@@ -1,11 +1,11 @@
 return {
-	require("plugins.neotree"),
 	{
 		"craftzdog/solarized-osaka.nvim",
 		lazy = false,
 		priority = 1000,
 		opts = {},
 	},
+	require("plugins.neotree"),
 	require("plugins.autoformatting"),
 	require("plugins.increname"),
 	require("plugins.bufferline"),
@@ -18,7 +18,6 @@ return {
 	require("plugins.gitsigns"),
 	require("plugins.indent-blankline"),
 	require("plugins.misc"),
-	require("plugins.windsurf"),
 	require("plugins.noice"),
 	require("plugins.smearcursor"),
 	require("plugins.incline"),

@@ -1,78 +1,68 @@
 -- Variables.
-local keymap = vim.keymap
-local opts = { noremap = true, silent = true }
-
--- Set leader keys.
+local km = vim.keymap
+local op = { noremap = true, silent = true }
+-- Leader keys.
 vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
--- General Keymaps (not using any leader).
-keymap.set("i", "kj", "<Esc>", opts) -- Exit insert mode with successive press of k,j.
-keymap.set("n", "x", '"_x', opts) -- Do things without affecting the registers.
-keymap.set("n", "+", "<C-a>", opts) -- Increment.
-keymap.set("n", "-", "<C-x>", opts) -- Decrement.
-keymap.set("n", "dq", 'vb"_d', opts) -- Delete a word backwards without affecting the default register.
-keymap.set("n", "dw", '"_daw', opts) -- Delete a word without affecting the default register.
-keymap.set("n", "te", ":tabedit<Return>") -- New tab.
-keymap.set("n", "H", ":tabprev<CR>", opts) -- Go to the previous tab
-keymap.set("n", "L", ":tabnext<CR>", opts) -- Go to the next tab
-keymap.set("n", "n", "nzzzv", opts) -- Find next and center.
-keymap.set("n", "N", "Nzzzv", opts) -- Find previous and center.
-keymap.set("n", "sp", ":split<Return>", opts) -- Horizontal split.
-keymap.set("n", "vsp", ":vsplit<Return>", opts) -- Vertical split.
-keymap.set("n", "<Up>", ":resize -2<CR>", opts) -- Resize window (up).
-keymap.set("n", "<Down>", ":resize +2<CR>", opts) -- Resize window (down).
-keymap.set("n", "<Left>", ":vertical resize -2<CR>", opts) -- Resize window (left).
-keymap.set("n", "<Right>", ":vertical resize +2<CR>", opts) -- Resize window (right).
-keymap.set("n", "<C-k>", ":wincmd k<CR>", opts) -- Navigate to split (up).
-keymap.set("n", "<C-j>", ":wincmd j<CR>", opts) -- Navigate to split (down).
-keymap.set("n", "<C-h>", ":wincmd h<CR>", opts) -- Navigate to split (left).
-keymap.set("n", "<C-l>", ":wincmd l<CR>", opts) -- Navigate to split (right).
-keymap.set("n", "<C-m>", "<C-i>", opts) -- Jumplist (forward).
-
--- Keymaps using the main Leader.
-keymap.set("n", "<Leader>p", '"0p', opts) -- Paste from yank register.
-keymap.set("n", "<Leader>P", '"0P', opts)
-keymap.set("v", "<Leader>p", '"0p', opts)
-keymap.set("n", "<Leader>c", '"_c', opts) -- Change without affecting register.
-keymap.set("n", "<Leader>C", '"_C', opts)
-keymap.set("v", "<Leader>c", '"_c', opts)
-keymap.set("v", "<Leader>C", '"_C', opts)
-keymap.set("n", "<Leader>d", '"_d', opts) -- Delete without affecting register.
-keymap.set("n", "<Leader>D", '"_D', opts)
-keymap.set("v", "<Leader>d", '"_d', opts)
-keymap.set("v", "<Leader>D", '"_D', opts)
-keymap.set("n", "<Leader>a", "gg<S-v>G", opts) -- Select all.
-keymap.set("n", "<Leader>o", "o<Esc>^Da", opts) -- Disable continuations.
-keymap.set("n", "<Leader>O", "O<Esc>^Da", opts)
-keymap.set("n", "<Leader>rn", ":IncRename ", opts) -- Incremental rename.
-
--- Keymaps using the secondary Leader (;).
-keymap.set("n", ";.", vim.diagnostic.open_float, opts) -- Open diagnostics.
-keymap.set("n", ";n", ":Noice<Enter>", opts) -- Noice command.
-keymap.set("n", ";m", ":Telescope<Enter>", opts) -- Open Telescope.
-keymap.set("n", ";q", ":q<Enter>", opts) -- Quit.
-keymap.set("n", ";w", ":w<Enter>", opts) -- Save.
-keymap.set("n", ";l", ":wq<Enter>", opts) -- Save and quit.
-keymap.set("n", ";[", ":Neotree toggle position=left<CR>", opts) -- Toggle Neotree.
-keymap.set("n", ";c", ":Codeium Chat<Enter>", opts)
-keymap.set("i", ";,", function()
+vim.g.maplocalleader = ";"
+-- No leader.
+km.set("i", "kj", "<Esc>", op) -- Exit insert mode.
+km.set("n", "x", '"_x', op) -- Delete character without affecting registers.
+km.set("n", "+", "<C-a>", op) -- Increment number.
+km.set("n", "-", "<C-x>", op) -- Decrement number.
+km.set("n", "dq", 'vb"_d', op) -- Delete backwards without affecting registers.
+km.set("n", "dw", '"_daw', op) -- Delete word without affecting registers.
+km.set("n", "te", "<cmd>tabedit<CR>", op) -- Open new tab.
+km.set("n", "H", "<cmd>tabprev<CR>", op) -- Previous tab.
+km.set("n", "L", "<cmd>tabnext<CR>", op) -- Next tab.
+km.set("n", "n", "nzzzv", op) -- Next search result and center.
+km.set("n", "N", "Nzzzv", op) -- Previous search result and center.
+km.set("n", "sp", "<cmd>split<CR>", op) -- Horizontal split.
+km.set("n", "vsp", "<cmd>vsplit<CR>", op) -- Vertical split.
+km.set("n", "<Up>", "<cmd>resize -2<CR>", op) -- Resize window up.
+km.set("n", "<Down>", "<cmd>resize +2<CR>", op) -- Resize window down.
+km.set("n", "<Left>", "<cmd>vertical resize -2<CR>", op) -- Resize window left.
+km.set("n", "<Right>", "<cmd>vertical resize +2<CR>", op) -- Resize window right.
+km.set("n", "<C-k>", "<cmd>wincmd k<CR>", op) -- Move to upper split.
+km.set("n", "<C-j>", "<cmd>wincmd j<CR>", op) -- Move to lower split.
+km.set("n", "<C-h>", "<cmd>wincmd h<CR>", op) -- Move to left split.
+km.set("n", "<C-l>", "<cmd>wincmd l<CR>", op) -- Move to right split.
+-- Main leader.
+km.set("n", "<leader>p", '"0p', op) -- Paste after cursor from yank register.
+km.set("n", "<leader>P", '"0P', op) -- Paste before cursor from yank register.
+km.set("v", "<leader>p", '"0p', op) -- Paste selection from yank register.
+km.set("n", "<leader>c", '"_c', op) -- Change without affecting registers.
+km.set("n", "<leader>C", '"_C', op) -- Change to end of line without affecting registers.
+km.set("v", "<leader>c", '"_c', op) -- Change selection without affecting registers.
+km.set("v", "<leader>C", '"_C', op) -- Change selection without affecting registers.
+km.set("n", "<leader>d", '"_d', op) -- Delete without affecting registers.
+km.set("n", "<leader>D", '"_D', op) -- Delete to end of line without affecting registers.
+km.set("v", "<leader>d", '"_d', op) -- Delete selection without affecting registers.
+km.set("v", "<leader>D", '"_D', op) -- Delete selection without affecting registers.
+km.set("n", "<leader>a", "ggVG", op) -- Select all.
+km.set("n", "<leader>o", "o<Esc>^Da", op) -- Open line without continuation.
+km.set("n", "<leader>O", "O<Esc>^Da", op) -- Open line above without continuation.
+km.set("n", "<leader>rn", "<cmd>IncRename ", op) -- Incremental rename.
+-- Local leader.
+km.set("n", "<localleader>.", vim.diagnostic.open_float, op) -- Open diagnostics.
+km.set("n", "<localleader>n", "<cmd>Noice<CR>", op) -- Open Noice.
+km.set("n", "<localleader>m", "<cmd>Telescope<CR>", op) -- Open Telescope.
+km.set("n", "<localleader>q", "<cmd>q<CR>", op) -- Quit.
+km.set("n", "<localleader>w", "<cmd>w<CR>", op) -- Save.
+km.set("n", "<localleader>l", "<cmd>wq<CR>", op) -- Save and quit.
+km.set("n", "<localleader>[", "<cmd>Neotree toggle position=left<CR>", op) -- Toggle Neotree.
+km.set("i", "<localleader>,", function()
 	require("cmp").complete()
-end, opts) -- Trigger completion explicitly in insert mode.
-keymap.set("n", ";,", function()
-	require("cmp").complete()
-end, opts) -- Trigger completion explicitly in normal mode.
-
--- Spectre Keymaps.
-keymap.set("n", "<leader>S", '<cmd>lua require("spectre").toggle()<CR>', {
-	desc = "Toggle Spectre",
-})
-keymap.set("n", "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
-	desc = "Search current word",
-})
-keymap.set("v", "<leader>sw", '<esc><cmd>lua require("spectre").open_visual()<CR>', {
-	desc = "Search selected text",
-})
-keymap.set("n", "<leader>sp", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-	desc = "Search in current file",
-})
+end, op) -- Trigger completion.
+-- Spectre.
+km.set("n", "<leader>ss", function()
+	require("spectre").toggle()
+end, { desc = "Toggle Spectre" })
+km.set("n", "<leader>sw", function()
+	require("spectre").open_visual({ select_word = true })
+end, { desc = "Search word" })
+km.set("v", "<leader>sv", function()
+	require("spectre").open_visual()
+end, { desc = "Search visual" })
+km.set("n", "<leader>sf", function()
+	require("spectre").open_file_search({ select_word = true })
+end, { desc = "Search file" })
