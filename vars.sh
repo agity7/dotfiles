@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 GO_VERSION="1.24.2"
+ENV_FILE="$HOME/.env"
 SWAGGER_VERSION="v0.30.0"
 GO_TARBALL="go${GO_VERSION}.linux-amd64.tar.gz"
 DOTFILES_DIR="$HOME/dotfiles"
@@ -28,10 +29,8 @@ DNF_UPDATE_EXCLUDES=(
 AIDER_PKG="aider-chat@latest"
 AIDER_BIN="$HOME/.local/bin/aider"
 AIDER_CONF="$HOME/.aider.conf.yml"
-AIDER_ENV="$HOME/.aider.env"
 AIDER_DIR="$HOME/.aider"
 AIDER_CONVENTIONS="$AIDER_DIR/CONVENTIONS.md"
 AIDER_CONVENTIONS_URL="https://gitlab.com/fabriktor/pkg/-/raw/main/aider/CONVENTIONS.md"
 AIDER_CONVENTION_SCRAPER="$HOME/.local/bin/aider-convention-scraper"
 AIDER_CONVENTION_SCRAPER_URL="https://gist.githubusercontent.com/chr15m/1e52c9a246c2f8867325db3dd7085cd4/raw/aider-convention-scraper"
-echo "$SUCCESS Variables loaded from vars.sh"

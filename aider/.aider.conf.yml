@@ -1,4 +1,4 @@
-env-file: ~/.aider.env
+model: openai/gpt-4o
 auto-commits: false
 gitignore: false
 auto-lint: true

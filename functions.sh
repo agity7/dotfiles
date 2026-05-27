@@ -44,6 +44,22 @@ cleanup_dotfile_conflicts() {
 		fi
 	done
 }
+
+setup_env_file() {
+	info "Setting up env file"
+	if [ ! -f "$ENV_FILE" ]; then
+		cat >"$ENV_FILE" <<'EOF'
+AIDER_OPENAI_API_KEY=""
+OPENAI_API_KEY=""
+EOF
+		chmod 600 "$ENV_FILE"
+		ok "Env file created at $ENV_FILE"
+		info "Add your API keys to $ENV_FILE"
+		return
+	fi
+	chmod 600 "$ENV_FILE"
+	ok "Env file already exists"
+}
 install_go() {
 	info "Installing Go $GO_VERSION to $DEV_DIR/go"
 	ensure_directory_exists "$DEV_DIR"
@@ -306,21 +322,6 @@ install_aider_convention_scraper() {
 	curl -fsSL "$AIDER_CONVENTION_SCRAPER_URL" -o "$AIDER_CONVENTION_SCRAPER" || die "Failed to download aider-convention-scraper"
 	chmod +x "$AIDER_CONVENTION_SCRAPER" || die "Failed to chmod aider-convention-scraper"
 	ok "aider-convention-scraper installed"
-}
-setup_aider_env() {
-	info "Setting up Aider env"
-	if [ ! -f "$AIDER_ENV" ]; then
-		cat >"$AIDER_ENV" <<'EOF'
-AIDER_OPENAI_API_KEY=""
-OPENAI_API_KEY=""
-EOF
-		chmod 600 "$AIDER_ENV"
-		ok "Aider env file created at $AIDER_ENV"
-		info "Add your OpenAI API key to $AIDER_ENV"
-		return
-	fi
-	chmod 600 "$AIDER_ENV"
-	ok "Aider env file already exists"
 }
 sync_aider_conventions() {
 	info "Syncing Aider conventions"
