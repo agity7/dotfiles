@@ -66,3 +66,13 @@ end, { desc = "Search visual" })
 km.set("n", "<leader>sf", function()
 	require("spectre").open_file_search({ select_word = true })
 end, { desc = "Search file" })
+-- Telescope.
+km.set("n", "<localleader>f", function()
+	require("telescope.builtin").find_files({ hidden = true })
+end, op) -- Find files.
+km.set("n", "<localleader>r", function()
+	require("telescope.builtin").live_grep({ additional_args = { "--hidden" } })
+end, op) -- Ripgrep project.
+km.set("n", "<localleader>b", function()
+	require("telescope.builtin").buffers()
+end, op) -- Find buffers.
