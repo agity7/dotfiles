@@ -1,6 +1,6 @@
 model: xai/grok-4.3
 auto-commits: false
-gitignore: true
+gitignore: false
 auto-lint: true
 read:
   - ~/.aider/CONVENTIONS.md
@@ -9,4 +9,3 @@ chat-history-file: .aider/state/chat.history.md
 llm-history-file: .aider/state/llm.history.md
 model-settings-file: .aider/state/model.settings.yml
 model-metadata-file: .aider/state/model.metadata.json
-aiderignore: .aider/ignore
