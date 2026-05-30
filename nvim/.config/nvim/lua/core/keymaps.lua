@@ -76,3 +76,6 @@ end, op) -- Ripgrep project.
 km.set("n", "<localleader>b", function()
 	require("telescope.builtin").buffers()
 end, op) -- Find buffers.
+km.set("n", "<localleader>e", function()
+	require("telescope.builtin").diagnostics()
+end, op) -- Find diagnostics.
