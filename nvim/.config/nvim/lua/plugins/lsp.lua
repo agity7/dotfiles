@@ -14,6 +14,16 @@ return {
 			require("cmp_nvim_lsp").default_capabilities()
 		)
 		local srv = {
+			emmet_language_server = {
+				filetypes = {
+					"html",
+					"css",
+					"scss",
+					"javascriptreact",
+					"typescriptreact",
+					"svelte",
+				},
+			},
 			gopls = {
 				settings = {
 					gopls = {
