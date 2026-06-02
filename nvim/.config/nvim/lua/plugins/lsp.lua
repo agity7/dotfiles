@@ -1,8 +1,8 @@
 return {
 	"neovim/nvim-lspconfig",
 	dependencies = {
-		{ "williamboman/mason.nvim", version = "1.11.0", config = true },
-		{ "williamboman/mason-lspconfig.nvim", version = "1.24.0" },
+		{ "williamboman/mason.nvim", config = true },
+		{ "williamboman/mason-lspconfig.nvim" },
 		{ "j-hui/fidget.nvim", opts = {} },
 		"hrsh7th/cmp-nvim-lsp",
 	},
@@ -29,6 +29,9 @@ return {
 					},
 				},
 			},
+			ts_ls = {},
+			svelte = {},
+			eslint = {},
 			dockerls = {},
 			docker_compose_language_service = {},
 			jsonls = {},

@@ -34,3 +34,9 @@ AIDER_CONVENTIONS="$AIDER_DIR/CONVENTIONS.md"
 AIDER_CONVENTIONS_URL="https://gitlab.com/fabriktor/pkg/-/raw/main/aider/CONVENTIONS.md"
 AIDER_CONVENTION_SCRAPER="$HOME/.local/bin/aider-convention-scraper"
 AIDER_CONVENTION_SCRAPER_URL="https://gist.githubusercontent.com/chr15m/1e52c9a246c2f8867325db3dd7085cd4/raw/aider-convention-scraper"
+NPM_GLOBAL_DIR="$HOME/.local/npm"
+NPM_GLOBAL_BIN="$NPM_GLOBAL_DIR/bin"
+NPM_GLOBAL_PACKAGES=(
+	"typescript-language-server"
+	"svelte-language-server"
+)

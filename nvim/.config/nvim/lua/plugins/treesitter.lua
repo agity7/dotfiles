@@ -24,6 +24,7 @@ return {
 				"markdown_inline",
 				"php",
 				"regex",
+				"svelte",
 				"toml",
 				"typescript",
 				"vim",

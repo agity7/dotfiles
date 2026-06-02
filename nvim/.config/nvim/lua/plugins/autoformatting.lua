@@ -16,7 +16,21 @@ return {
 			"goimports",
 		}
 		local src = {
-			fmt.prettier.with({ filetypes = { "html", "json", "yaml", "markdown" } }),
+			fmt.prettier.with({
+				filetypes = {
+					"html",
+					"css",
+					"scss",
+					"javascript",
+					"javascriptreact",
+					"typescript",
+					"typescriptreact",
+					"svelte",
+					"json",
+					"yaml",
+					"markdown",
+				},
+			}),
 			fmt.stylua.with({ filetypes = { "lua", "luau" } }),
 			fmt.shfmt.with({ filetypes = { "sh" } }),
 			diag.golangci_lint.with({ filetypes = { "go" } }),

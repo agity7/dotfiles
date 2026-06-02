@@ -327,4 +327,22 @@ sync_aider_conventions() {
 	curl -fsSL "$AIDER_CONVENTIONS_URL" -o "$AIDER_CONVENTIONS" || die "Failed to sync Aider conventions"
 	ok "Aider conventions synced"
 }
+install_npm_global_packages() {
+	info "Installing global npm packages"
+	command -v npm &>/dev/null || die "npm is not installed"
+	ensure_directory_exists "$NPM_GLOBAL_DIR"
+	npm config set prefix "$NPM_GLOBAL_DIR" || die "Failed to set npm prefix"
+	export PATH="$NPM_GLOBAL_BIN:$PATH"
+	local pkg
+	for pkg in "${NPM_GLOBAL_PACKAGES[@]}"; do
+		[ -n "$pkg" ] || continue
+		if npm list -g --depth=0 "$pkg" &>/dev/null; then
+			ok "npm package already installed: $pkg"
+			continue
+		fi
+		info "Installing npm package: $pkg"
+		npm install -g "$pkg" || die "Failed to install npm package: $pkg"
+	done
+	ok "Global npm packages installed"
+}
 ok "Functions loaded from functions.sh"

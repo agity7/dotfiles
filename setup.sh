@@ -11,6 +11,7 @@ sudo -v
 while sudo -v; do sleep 800; done 2>/dev/null &
 dnf_update_system
 install_dnf_packages
+install_npm_global_packages
 setup_dotfiles
 setup_env_file
 # install_librewolf
