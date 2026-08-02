@@ -20,6 +20,22 @@ return {
 		local fb = tel.extensions.file_browser.actions
 		tel.setup({
 			defaults = {
+				vimgrep_arguments = {
+					"rg",
+					"--color=never",
+					"--no-heading",
+					"--with-filename",
+					"--line-number",
+					"--column",
+					"--smart-case",
+					"--hidden",
+					"--glob",
+					"!**/.git/*",
+					"--glob",
+					"!**/node_modules/*",
+					"--glob",
+					"!**/.venv/*",
+				},
 				mappings = {
 					i = {
 						["<C-k>"] = act.move_selection_previous,
@@ -41,9 +57,9 @@ return {
 			pickers = {
 				find_files = {
 					file_ignore_patterns = {
-						"node_modules",
-						".git",
-						".venv",
+						"node_modules/",
+						"%.git/",
+						"%.venv/",
 					},
 					hidden = true,
 				},

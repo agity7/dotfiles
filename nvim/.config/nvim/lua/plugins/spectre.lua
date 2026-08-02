@@ -10,6 +10,10 @@ return {
 	},
 	opts = {
 		default = {
+			find = {
+				cmd = "rg",
+				options = { "ignore-case", "hidden" },
+			},
 			replace = {
 				cmd = "sd",
 			},
