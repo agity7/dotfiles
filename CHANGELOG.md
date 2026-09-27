@@ -1,3 +1,9 @@
+## v0.0.7 (2026-09-27)
+
+### Fix
+
+- disable amd gpu from install scirpt
+
 ## v0.0.6 (2026-08-02)
 
 ### Fix
