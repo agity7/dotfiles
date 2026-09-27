@@ -32,7 +32,7 @@ install_go
 # install_flutter
 # install_android_studio
 # run_flutter_doctor
-fix_amdgpu_on_fedora
+# fix_amdgpu_on_fedora
 set_zsh_default
 ok "Please restart your system for changes to take effect"
 ok "Installation completed: $(date)"
