@@ -43,7 +43,7 @@ return {
 		ls.setup({
 			sources = src,
 			on_attach = function(cl, buf)
-				if not cl.supports_method("textDocument/formatting") then
+				if not cl:supports_method("textDocument/formatting", buf) then
 					return
 				end
 				local grp = vim.api.nvim_create_augroup("LspFormatting", { clear = false })

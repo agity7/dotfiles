@@ -91,7 +91,7 @@ return {
 				map("n", "<leader>ls", pick.lsp_document_symbols, "Document symbols")
 				map("n", "<leader>lw", pick.lsp_dynamic_workspace_symbols, "Workspace symbols")
 				map({ "n", "x" }, "<leader>la", vim.lsp.buf.code_action, "Code action")
-				if cl and cl.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+				if cl and cl:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, ev.buf) then
 					local grp = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
 					vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 						buffer = ev.buf,
@@ -111,7 +111,7 @@ return {
 						end,
 					})
 				end
-				if cl and cl.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+				if cl and cl:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, ev.buf) then
 					map("n", "<leader>lh", function()
 						vim.lsp.inlay_hint.enable(
 							not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }),
