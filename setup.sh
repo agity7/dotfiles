@@ -21,6 +21,7 @@ install_dropbox
 install_pipx_commitizen
 setup_flatpak
 install_rust
+install_tree_sitter_cli
 install_sd
 install_aider
 sync_aider_conventions

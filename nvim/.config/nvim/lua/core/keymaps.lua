@@ -4,6 +4,17 @@ local op = { noremap = true, silent = true }
 -- Leader keys.
 vim.g.mapleader = " "
 vim.g.maplocalleader = ";"
+if vim.fn.has("nvim-0.12") == 1 then
+	km.set("n", "<C-Space>", function()
+		vim.treesitter.select("parent", vim.v.count1)
+	end, op) -- Start Tree-sitter selection.
+	km.set("x", "<C-Space>", function()
+		vim.treesitter.select("parent", vim.v.count1)
+	end, op) -- Grow Tree-sitter selection.
+	km.set("x", "<M-Space>", function()
+		vim.treesitter.select("child", vim.v.count1)
+	end, op) -- Shrink Tree-sitter selection.
+end
 -- No leader.
 km.set("i", "kj", "<Esc>", op) -- Exit insert mode.
 km.set("n", "x", '"_x', op) -- Delete character without affecting registers.

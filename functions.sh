@@ -221,6 +221,27 @@ install_rust() {
 	fi
 	ok "Rust installed"
 }
+install_tree_sitter_cli() {
+	info "Checking Tree-sitter CLI"
+	local nvim_version
+	nvim_version="$(nvim --version 2>/dev/null | head -n1 | sed -E 's/^NVIM v([0-9]+\.[0-9]+).*/\1/')"
+	if [ -z "$nvim_version" ] || [ "$(printf '%s\n' "0.12" "$nvim_version" | sort -V | head -n1)" != "0.12" ]; then
+		ok "Tree-sitter CLI 0.26+ is not required by this Neovim version"
+		return
+	fi
+	[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+	local current=""
+	if command -v tree-sitter &>/dev/null; then
+		current="$(tree-sitter --version 2>/dev/null | awk '{print $2}')"
+	fi
+	if [ -n "$current" ] && [ "$(printf '%s\n' "$TREE_SITTER_CLI_MIN_VERSION" "$current" | sort -V | head -n1)" = "$TREE_SITTER_CLI_MIN_VERSION" ]; then
+		ok "Tree-sitter CLI $current already satisfies >= $TREE_SITTER_CLI_MIN_VERSION"
+		return
+	fi
+	cargo install --locked --version "$TREE_SITTER_CLI_VERSION" tree-sitter-cli || die "Tree-sitter CLI installation failed"
+	hash -r
+	ok "Tree-sitter CLI installed"
+}
 install_sd() {
 	info "Installing sd"
 	if command -v sd &>/dev/null; then

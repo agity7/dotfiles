@@ -1,9 +1,5 @@
-# Destructive-command safeguards. The rm executable itself is wrapped in
-# ~/bin/rm; these zsh options add an extra interactive guard for `rm *` and
-# `rm path/*`, including a ten-second delay before confirmation.
 unsetopt RM_STAR_SILENT
 setopt RM_STAR_WAIT
-
 eval "$(starship init zsh)"
 unset SSH_ASKPASS
 [[ -r /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
