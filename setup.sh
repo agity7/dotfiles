@@ -17,7 +17,7 @@ verify_shell_safety
 setup_env_file
 # install_librewolf
 install_docker
-install_dropbox
+# install_dropbox
 install_pipx_commitizen
 setup_flatpak
 install_rust
