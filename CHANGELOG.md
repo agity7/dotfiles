@@ -1,3 +1,10 @@
+## v0.0.11 (2026-09-30)
+
+### Fix
+
+- wefwefew
+- bypass dropbox instal
+
 ## v0.0.10 (2026-09-29)
 
 ### Fix
