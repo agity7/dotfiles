@@ -1,3 +1,9 @@
+## v0.0.9 (2026-09-29)
+
+### Fix
+
+- add safeguard safeguard
+
 ## v0.0.8 (2026-09-28)
 
 ### Fix
