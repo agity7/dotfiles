@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+set -u
+
+REAL_RM="${SAFE_RM_REAL_RM:-/usr/bin/rm}"
+SAFE_HOME="${SAFE_RM_HOME:-$HOME}"
+CHECK_ONLY="${SAFE_RM_CHECK_ONLY:-0}"
+
+fail() {
+	printf 'rm: BLOCKED by shell safety: %s\n' "$1" >&2
+	printf 'rm: use a narrower target. This guard intentionally protects catastrophic paths.\n' >&2
+	exit 64
+}
+
+normalize_path() {
+	local path="$1"
+	if command -v realpath >/dev/null 2>&1; then
+		realpath -ms -- "$path"
+		return
+	fi
+	printf '%s\n' "$path"
+}
+
+is_same_or_ancestor() {
+	local candidate="$1"
+	local child="$2"
+	[[ "$candidate" == "/" || "$child" == "$candidate" || "$child" == "$candidate/"* ]]
+}
+
+is_protected_path() {
+	local path="$1"
+	local protected
+	local -a protected_paths=(
+		"/"
+		"/bin"
+		"/boot"
+		"/dev"
+		"/etc"
+		"/home"
+		"/lib"
+		"/lib64"
+		"/media"
+		"/mnt"
+		"/opt"
+		"/proc"
+		"/root"
+		"/run"
+		"/sbin"
+		"/srv"
+		"/sys"
+		"/tmp"
+		"/usr"
+		"/var"
+		"$SAFE_HOME"
+		"$SAFE_HOME/.config"
+		"$SAFE_HOME/.dropbox"
+		"$SAFE_HOME/.dropbox-dist"
+		"$SAFE_HOME/.gnupg"
+		"$SAFE_HOME/.local"
+		"$SAFE_HOME/.mozilla"
+		"$SAFE_HOME/.ssh"
+		"$SAFE_HOME/Dropbox"
+		"$SAFE_HOME/dev"
+		"$SAFE_HOME/dotfiles"
+		"$SAFE_HOME/fabriktor"
+	)
+
+	for protected in "${protected_paths[@]}"; do
+		[[ "$path" == "$(normalize_path "$protected")" ]] && return 0
+	done
+
+	# Dropbox is the source-of-truth tree on this workstation. Protect each
+	# immediate top-level Dropbox folder too, so `rm -rf ~/Dropbox/*` cannot
+	# turn into a cloud-synced mass deletion after glob expansion.
+	local dropbox
+	local relative
+	dropbox="$(normalize_path "$SAFE_HOME/Dropbox")"
+	if [[ "$path" == "$dropbox/"* ]]; then
+		relative="${path#"$dropbox/"}"
+		[[ -n "$relative" && "$relative" != */* ]] && return 0
+	fi
+
+	return 1
+}
+
+recursive=0
+after_double_dash=0
+operands=()
+
+for arg in "$@"; do
+	if (( ! after_double_dash )) && [[ "$arg" == "--" ]]; then
+		after_double_dash=1
+		continue
+	fi
+
+	if (( ! after_double_dash )) && [[ "$arg" == --no-preserve-root ]]; then
+		fail "--no-preserve-root is disabled"
+	fi
+
+	if (( ! after_double_dash )) && [[ "$arg" == --recursive ]]; then
+		recursive=1
+		continue
+	fi
+
+	if (( ! after_double_dash )) && [[ "$arg" == -* && "$arg" != "-" ]]; then
+		if [[ "$arg" != --* && ( "$arg" == *r* || "$arg" == *R* ) ]]; then
+			recursive=1
+		fi
+		continue
+	fi
+
+	operands+=("$arg")
+done
+
+if (( recursive )); then
+	cwd="$(normalize_path "$PWD")"
+	for operand in "${operands[@]}"; do
+		normalized="$(normalize_path "$operand")"
+
+		if is_protected_path "$normalized"; then
+			fail "refusing recursive deletion of protected path: $normalized"
+		fi
+
+		if is_same_or_ancestor "$normalized" "$cwd"; then
+			fail "refusing recursive deletion of the current directory or one of its ancestors: $normalized"
+		fi
+
+		if [[ -e "$normalized" ]] && command -v findmnt >/dev/null 2>&1; then
+			if findmnt -rn -M "$normalized" >/dev/null 2>&1; then
+				fail "refusing recursive deletion of a mounted filesystem root: $normalized"
+			fi
+		fi
+	done
+fi
+
+if [[ "$CHECK_ONLY" == "1" ]]; then
+	exit 0
+fi
+
+exec "$REAL_RM" --preserve-root=all "$@"

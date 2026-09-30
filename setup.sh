@@ -13,6 +13,7 @@ dnf_update_system
 install_dnf_packages
 install_npm_global_packages
 setup_dotfiles
+verify_shell_safety
 setup_env_file
 # install_librewolf
 install_docker

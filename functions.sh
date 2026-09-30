@@ -195,12 +195,21 @@ setup_dotfiles() {
 	info "Setting up dotfiles"
 	[ -d "$DOTFILES_DIR" ] || die "Dotfiles directory not found: $DOTFILES_DIR"
 	cleanup_dotfile_conflicts
+	# Keep ~/bin as a real directory so Stow links individual safety commands
+	# instead of folding the whole directory into a single symlink.
+	ensure_directory_exists "$HOME/bin"
 	if command -v stow &>/dev/null; then
-		for dir in zsh nvim tmux starship wezterm aider; do
+		for dir in zsh nvim tmux starship wezterm aider safety; do
 			[ -d "$DOTFILES_DIR/$dir" ] && stow -d "$DOTFILES_DIR" -t "$HOME" "$dir"
 		done
 	fi
 	ok "Dotfiles setup completed"
+}
+verify_shell_safety() {
+	info "Verifying destructive-command safeguards"
+	[ -x "$HOME/bin/rm" ] || die "Safe rm wrapper was not installed"
+	[ -x "$HOME/bin/sudo" ] || die "Safe sudo wrapper was not installed"
+	ok "Destructive-command safeguards installed"
 }
 install_rust() {
 	info "Installing Rust"

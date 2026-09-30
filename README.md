@@ -65,3 +65,26 @@ Run:
 ```sh
 glxinfo | grep "OpenGL renderer string"
 ```
+
+## Destructive-command safeguards
+
+The `safety` Stow package installs `~/bin/rm` and `~/bin/sudo`. Because `~/bin`
+is before the system command directories in the configured `PATH`, the guard
+applies to normal commands launched from WezTerm, tmux, Neovim terminals, and
+other terminals using the configured shell.
+
+The guard hard-blocks recursive deletion of the home directory, critical user
+directories such as Dropbox/dotfiles/SSH configuration, system roots, mounted
+filesystem roots, and the current working directory or any of its ancestors.
+It also rejects `--no-preserve-root` and always invokes GNU `rm` with
+`--preserve-root=all`.
+
+The `sudo` wrapper preflights ordinary `sudo rm ...` commands through the same
+policy before invoking the real `/usr/bin/sudo`. It also blocks common raw-disk
+destruction commands (`mkfs*`, `wipefs`, `blkdiscard`, partition editors, and
+`dd` writes to `/dev/*`). Zsh additionally enables its `rm *` / `rm path/*`
+confirmation and ten-second wait.
+
+This is an accident-prevention layer, not a security boundary: an intentional
+command that directly calls `/usr/bin/rm`, runs a root shell, or otherwise
+bypasses `PATH` can still bypass it.

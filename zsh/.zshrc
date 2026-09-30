@@ -1,3 +1,9 @@
+# Destructive-command safeguards. The rm executable itself is wrapped in
+# ~/bin/rm; these zsh options add an extra interactive guard for `rm *` and
+# `rm path/*`, including a ten-second delay before confirmation.
+unsetopt RM_STAR_SILENT
+setopt RM_STAR_WAIT
+
 eval "$(starship init zsh)"
 unset SSH_ASKPASS
 [[ -r /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -20,4 +26,4 @@ alias v="nvim"
 export DEV_DIR="$HOME/.dev"
 export JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
 export ANDROID_STUDIO_HOME="/opt/android-studio"
-export PATH="$DEV_DIR/go/bin:$NPM_GLOBAL_BIN:$HOME/.local/bin:$HOME/bin:$DEV_DIR/flutter/bin:$DEV_DIR/flutter/bin/cache/dart-sdk/bin:$ANDROID_STUDIO_HOME/bin:$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/bin:$DEV_DIR/go/bin:$NPM_GLOBAL_BIN:$HOME/.local/bin:$DEV_DIR/flutter/bin:$DEV_DIR/flutter/bin/cache/dart-sdk/bin:$ANDROID_STUDIO_HOME/bin:$HOME/.cargo/bin:$PATH"

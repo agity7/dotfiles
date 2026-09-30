@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -u
+
+REAL_SUDO="${SAFE_SUDO_REAL_SUDO:-/usr/bin/sudo}"
+SAFE_RM="${SAFE_RM_BIN:-$HOME/bin/rm}"
+
+# Find the command portion of a normal sudo invocation. This deliberately
+# handles the common option forms while leaving unusual sudo invocations alone.
+args=("$@")
+i=0
+command_index=-1
+
+while (( i < ${#args[@]} )); do
+	arg="${args[$i]}"
+	case "$arg" in
+		--)
+			((i += 1))
+			command_index=$i
+			break
+			;;
+		-u|-g|-h|-p|-C|-T|-R|-D|-r|-t)
+			((i += 2))
+			continue
+			;;
+		--user|--group|--host|--prompt|--close-from|--command-timeout|--chroot|--chdir|--role|--type)
+			((i += 2))
+			continue
+			;;
+		--user=*|--group=*|--host=*|--prompt=*|--close-from=*|--command-timeout=*|--chroot=*|--chdir=*|--role=*|--type=*)
+			((i += 1))
+			continue
+			;;
+		-*)
+			((i += 1))
+			continue
+			;;
+		*)
+			command_index=$i
+			break
+			;;
+	esac
+done
+
+if (( command_index >= 0 && command_index < ${#args[@]} )); then
+	command_name="${args[$command_index]##*/}"
+	command_args=("${args[@]:command_index+1}")
+
+	if [[ "$command_name" == "rm" && -x "$SAFE_RM" ]]; then
+		SAFE_RM_CHECK_ONLY=1 SAFE_RM_HOME="$HOME" "$SAFE_RM" "${command_args[@]}" || exit $?
+	fi
+
+	case "$command_name" in
+		mkfs|mkfs.*|wipefs|blkdiscard|fdisk|sfdisk|cfdisk|parted|sgdisk)
+			printf 'sudo: BLOCKED by shell safety: destructive disk command: %s\n' "$command_name" >&2
+			exit 64
+			;;
+		dd)
+			for command_arg in "${command_args[@]}"; do
+				if [[ "$command_arg" == of=/dev/* ]]; then
+					printf 'sudo: BLOCKED by shell safety: dd output targets a device: %s\n' "$command_arg" >&2
+					exit 64
+				fi
+			done
+			;;
+	esac
+fi
+
+exec "$REAL_SUDO" "$@"
