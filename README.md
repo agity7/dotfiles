@@ -2,7 +2,7 @@
 
 ## Overview
 
-Fedora-focused dotfiles and setup scripts for a reproducible development environment.
+Dotfiles for Fedora Linux and macOS, sharing Neovim, tmux, Zsh, Starship, and WezTerm configurations.
 
 ## Stack
 
@@ -16,13 +16,24 @@ Fedora-focused dotfiles and setup scripts for a reproducible development environ
 
 ## Installation
 
-Clone the repository into `~/dotfiles`, then run:
+Clone the repository into `~/dotfiles`, then run the installer for your OS.
+
+**Fedora Linux:**
 
 ```bash
-chmod +x setup.sh && ./setup.sh
+./setup.sh
 ```
 
-## Environment
+**macOS:**
+
+```bash
+./setup-macos.sh
+```
+
+The macOS installer uses Homebrew and Stow, reuses the shared configurations,
+and can be run repeatedly. See [MACOS.md](MACOS.md) for details.
+
+## Environment (Fedora)
 
 The setup creates a global environment file at:
 
@@ -33,7 +44,7 @@ The setup creates a global environment file at:
 This file stores private API keys and local secrets used by development tools.
 It is private and must not be committed.
 
-## Aider
+## Aider (Fedora)
 
 Aider reads its configuration from the dotfiles-managed config file and loads API keys from:
 
@@ -53,12 +64,15 @@ The Aider config reads this conventions file automatically.
 
 | File               | Purpose                                      |
 | ------------------ | -------------------------------------------- |
-| `setup.sh`         | Main installation entrypoint.                |
+| `setup.sh`         | Fedora installer.                            |
+| `setup-macos.sh`   | macOS installer.                             |
+| `Brewfile.macos`   | macOS Homebrew dependencies.                 |
+| `MACOS.md`         | macOS setup and usage notes.                 |
 | `functions.sh`     | Installation functions.                      |
 | `vars.sh`          | Shared variables, paths, versions, and URLs. |
 | `dnf-packages.txt` | Fedora packages installed through `dnf`.     |
 
-## AMDGPU Verification
+## AMDGPU Verification (Fedora)
 
 Run:
 
@@ -66,7 +80,7 @@ Run:
 glxinfo | grep "OpenGL renderer string"
 ```
 
-## Destructive-command safeguards
+## Destructive-command safeguards (Fedora)
 
 The `safety` Stow package installs `~/bin/rm` and `~/bin/sudo`. Because `~/bin`
 is before the system command directories in the configured `PATH`, the guard
