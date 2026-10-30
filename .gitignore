@@ -1,0 +1,64 @@
+# Fabriktor tooling
+.aider*
+.imported_make/
+
+# npm / Svelte / Vite
+node_modules/
+.svelte-kit/
+.output/
+.vercel/
+.netlify/
+dist/
+build/
+build-native/
+coverage/
+*.tsbuildinfo
+vite.config.*.timestamp-*
+
+# Capacitor: generated web assets (keep ios/ and android/ source tracked)
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/capacitor.plugins.json
+ios/capacitor-cordova-ios-plugins/
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/capacitor-cordova-android-plugins/
+
+# Xcode / Android Studio
+Pods/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+*.xcarchive/
+*.dSYM/
+.gradle/
+.cxx/
+.externalNativeBuild/
+.idea/
+*.iml
+local.properties
+
+# Go binaries and test output
+/bin/
+*.test
+coverage.out
+*.coverprofile
+*.prof
+*.pprof
+
+# Local configuration and signing keys
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.sample
+!.env.*.sample
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+
+# OS and logs
+.DS_Store
+*.log
