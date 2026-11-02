@@ -1,3 +1,9 @@
+## v0.0.14 (2026-11-01)
+
+### Fix
+
+- enhance mac and linux scripts
+
 ## v0.0.13 (2026-10-29)
 ### Fix
 - wiofnoewnfew
