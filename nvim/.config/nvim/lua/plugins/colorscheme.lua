@@ -18,5 +18,4 @@ function M.setup()
 		lualine_bold = false,
 	})
 end
-
 return M

@@ -10,5 +10,4 @@ function M.setup()
 	end
 	vim.opt.rtp:prepend(dir)
 end
-
 return M

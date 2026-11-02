@@ -1,7 +1,9 @@
 # Fabriktor macOS development setup
 
-This is an **additive** macOS setup. The existing Linux `setup.sh`,
-`functions.sh`, `vars.sh`, package list and Stow packages remain unchanged.
+The macOS installer uses `setup-macos.sh`, `macos/functions.sh`, and
+`macos/vars.sh`, matching the function-based Fedora layout. It shares Zsh,
+Neovim, tmux, Starship and WezTerm settings with Fedora without modifying
+the Linux installer or package list.
 
 ## Install
 
@@ -29,11 +31,11 @@ are moved to a separate directory before that folder is replaced.
 ## What is shared
 
 - `nvim/`: **exactly** the Linux Neovim configuration, keymaps and plugins.
-- `tmux/`: shared keybindings and plugins; `tmux-macos/` sources it and restores
-  the native green tmux status bar shown on Linux (no powerline segments).
+- `tmux/`: one shared configuration, native tmux status bar with Fabriktor yellow
+  (`#FFFC00`), and no powerline theme.
 - `starship/`, `wezterm/`: the same prompt, font, colors and terminal layout.
-- `zsh/.zshrc`: macOS reads the existing Zsh aliases and common styling through
-  `zsh-macos/.zshrc`, then adjusts paths and plugin locations for Homebrew.
+- `zsh/.zshrc`: one shared Zsh configuration. A single OS dispatch loads
+  `zsh-platform/macos.zsh` or `zsh-platform/linux.zsh` for platform paths and plugins.
 
 The Linux-only `safety/` commands are intentionally **not** installed on macOS:
 its `rm` wrapper relies on GNU options incompatible with Apple's `rm`.
@@ -77,7 +79,7 @@ If tmux is already running after setup, reload the new config once:
 tmux source-file ~/.tmux.conf
 ```
 
-The config does not change your existing Linux tmux setup.
+The shared tmux configuration is also used on Linux.
 
 To get the tmux plugins declared in the existing `.tmux.conf`, enter tmux and
 press `Ctrl-S` then `Shift-I` to run TPM's installer. This step is needed only

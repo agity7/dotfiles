@@ -1,74 +1,39 @@
 ## v0.0.13 (2026-10-29)
-
 ### Fix
-
 - wiofnoewnfew
-
 ## v0.0.12 (2026-10-29)
-
 ### Fix
-
 - enhance mac scripts
-
 ## v0.0.11 (2026-09-30)
-
 ### Fix
-
 - wefwefew
 - bypass dropbox instal
-
 ## v0.0.10 (2026-09-29)
-
 ### Fix
-
 - wefffffffffffffffffffwfwefew
-
 ## v0.0.9 (2026-09-29)
-
 ### Fix
-
 - add safeguard safeguard
-
 ## v0.0.8 (2026-09-28)
-
 ### Fix
-
 - fix deprecations
-
 ## v0.0.7 (2026-09-27)
-
 ### Fix
-
 - disable amd gpu from install scirpt
-
 ## v0.0.6 (2026-08-02)
-
 ### Fix
-
 - fix spectre
-
 ## v0.0.5 (2026-06-02)
-
 ### Fix
-
 - enhance lsp
-
 ## v0.0.4 (2026-06-01)
-
 ### Fix
-
 - up dotfiles
-
 ## v0.0.3 (2026-05-31)
-
 ### Fix
-
 - edit conf
-
 ## v0.0.2 (2026-05-30)
-
 ### Fix
-
 - add missing keymap
 - edit aider congf
 - edit autoformatting

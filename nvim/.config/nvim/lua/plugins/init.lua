@@ -19,7 +19,6 @@ return {
 	require("plugins.indent-blankline"),
 	require("plugins.misc"),
 	require("plugins.noice"),
-	-- require("plugins.smearcursor"),
 	require("plugins.incline"),
 	require("plugins.spectre"),
 }
